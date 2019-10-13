@@ -5,7 +5,7 @@
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
   "module": "build/module/index.js",
-  "repository": "https://github.com/fourstacks/polaris-form-builder",
+  "repository": "https://github.com/AdditionApps/polaris-form-builder",
   "license": "MIT",
   "keywords": [],
   "scripts": {
@@ -49,11 +49,19 @@
   "engines": {
     "node": ">=8.9"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@shopify/polaris": "^4.5.0",
+    "locale-currency": "0.0.2",
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2"
+  },
   "devDependencies": {
     "@bitjson/npm-scripts-info": "^1.0.0",
     "@bitjson/typedoc": "^0.15.0-0",
     "@istanbuljs/nyc-config-typescript": "^0.1.3",
+    "@types/node": "^12.7.12",
+    "@types/react": "^16.9.5",
+    "@types/react-dom": "^16.9.1",
     "ava": "2.2.0",
     "codecov": "^3.5.0",
     "cz-conventional-changelog": "^2.1.0",

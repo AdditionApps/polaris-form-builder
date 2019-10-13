@@ -1,1 +1,3 @@
-export * from './lib/number';
+export { PolarisFormBuilder } from './lib/PolarisFormBuilder';
+export { IField } from './lib/IField';
+export { IUnits } from './lib/IUnits';
