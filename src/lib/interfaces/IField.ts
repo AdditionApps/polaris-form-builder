@@ -1,9 +1,12 @@
 export interface IField {
   key: string;
   input: string;
-  config: any;
+  config?: object;
   defaultValue?: any;
   subFields?: IField[];
+  title?: string;
+  emptyMessage?: string;
+  layout?: "stacked" | "grouped" | "condensed";
   infoMessage?: string;
   infoMessageCondition?: boolean;
 }

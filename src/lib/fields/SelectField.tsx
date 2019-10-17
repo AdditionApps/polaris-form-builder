@@ -1,35 +1,28 @@
 import * as React from "react";
+import { useContext } from "react";
+import { observer } from "mobx-react-lite";
 import { Select } from "@shopify/polaris";
-import { IField } from "../IField";
+import { IFieldProps } from "../interfaces/IFieldProps";
+import Store from "../stores/RootStore";
 
-interface IProps {
-  field: IField;
-  value: any;
-  errors: string[] | false;
-  onFieldUpdate: (key: string, newValue: boolean | string) => void;
-  onFieldDirty: (key: string) => void;
-}
+const Field = ({ field, parent }: IFieldProps) => {
+  const store = useContext(Store);
 
-export default function({
-  field,
-  value,
-  errors,
-  onFieldUpdate,
-  onFieldDirty
-}: IProps) {
+  let value = store.getValue(field, parent);
+
   if (value == null) {
-    value = field.config.options[0].value;
+    value = field.config["options"][0].value;
   }
 
   const fieldProps = {
     value: value,
-    error: errors,
-    onChange: newValue => {
-      onFieldUpdate(field.key, newValue);
-      onFieldDirty(field.key);
-    },
+    error: store.getErrors(field, parent),
+    label: field.config["label"],
+    onChange: value => store.updateValue(value, field, parent),
     ...field.config
   };
 
   return <Select {...fieldProps} />;
-}
+};
+
+export default observer(Field);

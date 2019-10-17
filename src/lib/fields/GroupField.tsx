@@ -1,52 +1,29 @@
 import * as React from 'react';
-import { FormFieldGroup } from './../FormFieldGroup';
-import { IField } from '../IField';
-import { IUnits } from '../IUnits';
+import { useContext } from 'react';
+import { observer } from 'mobx-react-lite';
+import { IFieldProps } from '../interfaces/IFieldProps';
+import { IField } from '../interfaces/IField';
 import { FormLayout } from '@shopify/polaris';
+import Store from '../stores/RootStore';
 
-interface IProps {
-  field: IField;
-  value: string;
-  units: IUnits;
-  errors: object;
-  onFieldUpdate: (key: string, newValue: string | number) => void;
-  onFieldDirty: (key: string) => void;
-}
-
-export default function({
-  field,
-  value,
-  units,
-  errors,
-  onFieldUpdate,
-  onFieldDirty
-}: IProps) {
+const Field = ({ field }: IFieldProps) => {
   const wrapperStyle = {
     marginTop: '-1.6rem',
     marginLeft: '-2rem'
   };
 
+  const store = useContext(Store);
+
   return (
     <div style={wrapperStyle}>
-      <FormLayout.Group condensed>
-        {field.subFields.map((field: IField, index: number) => {
-          let fieldValue = value[field.key];
-
-          return (
-            <FormFieldGroup
-              key={index}
-              field={field}
-              value={fieldValue}
-              units={units}
-              errors={errors}
-              onFieldGroupUpdate={(key, newValue) =>
-                onFieldUpdate(key, newValue)
-              }
-              onFieldGroupDirty={key => onFieldDirty(key)}
-            />
-          );
+      <FormLayout.Group condensed={field['condensed']}>
+        {field.subFields.map((subField: IField, index: number) => {
+          const Field = store.getFieldName(subField);
+          return <Field field={subField} store={store} key={index} />;
         })}
       </FormLayout.Group>
     </div>
   );
-}
+};
+
+export default observer(Field);

@@ -1,78 +1,42 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
-import { FormFieldGroup } from './FormFieldGroup';
-import { IField } from './IField';
-import { IUnits } from './IUnits';
+import { memo, useContext } from 'react';
+import * as fieldInputs from './fields';
+import { IField } from './interfaces/IField';
+import { IStore } from './interfaces/IStore';
 import { FormLayout } from '@shopify/polaris';
+import StoreContext from './stores/RootStore';
+import isEqual from 'lodash.isequal';
 
-interface IProps {
-  fields: IField[];
-  model: any;
-  units: IUnits;
-  errors: object;
-  onModelUpdate: (model: any) => void;
-}
+const FormBuilder = (props: IStore) => {
+  const store = useContext(StoreContext);
+  store.init(props);
 
-export function PolarisFormBuilder({
-  fields,
-  model,
-  units,
-  errors,
-  onModelUpdate
-}: IProps) {
-  const [modelState, setModelState] = useState(model);
-  const [errorState, setErrorState] = useState(errors);
+  const getFieldName = input => {
+    let ucInput = input.charAt(0).toUpperCase() + input.slice(1);
 
-  useEffect(() => {
-    onModelUpdate(modelState);
-  });
-
-  useEffect(() => {
-    setErrorState(errors);
-  }, [errors]);
-
-  const getValue = field => {
-    if (field.input === 'group') {
-      const subFieldKeys = field.subFields.map(field => field.key);
-
-      return Object.keys(model)
-        .filter(key => subFieldKeys.includes(key))
-        .reduce((obj, key) => {
-          obj[key] = model[key];
-          return obj;
-        }, {});
-    }
-
-    return model[field['key']];
+    return fieldInputs[ucInput + 'Field'];
   };
 
+  console.log('Rerendering form builder');
   return (
-    <FormLayout>
-      {fields.map((field: IField, index: number) => {
-        let value = getValue(field);
+    <StoreContext.Provider value={store}>
+      <FormLayout>
+        {props.fields.map((field: IField, index: number) => {
+          const Field = getFieldName(field.input);
 
-        return (
-          <FormFieldGroup
-            key={index}
-            field={field}
-            value={value}
-            units={units}
-            errors={errorState}
-            onFieldGroupUpdate={(key, value) =>
-              setModelState({ ...modelState, [key]: value })
-            }
-            onFieldGroupDirty={errorKey => {
-              let filteredErrors = Object.keys(errorState)
-                .filter(key => key !== errorKey)
-                .reduce((obj, key) => {
-                  obj[key] = errorState[key];
-                  return obj;
-                }, {});
-              setErrorState(filteredErrors);
-            }}
-          />
-        );
-      })}
-    </FormLayout>
+          return <Field field={field} key={index} />;
+        })}
+      </FormLayout>
+    </StoreContext.Provider>
   );
-}
+};
+
+const propsEqual = (prev, next) => {
+  return (
+    isEqual(prev.fields, next.fields) &&
+    isEqual(prev.units, next.units) &&
+    isEqual(prev.errors, next.errors)
+  );
+};
+
+export const PolarisFormBuilder = memo(FormBuilder, propsEqual);

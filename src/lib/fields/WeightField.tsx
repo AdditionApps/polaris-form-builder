@@ -1,17 +1,13 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { observer } from 'mobx-react-lite';
 import { TextField } from '@shopify/polaris';
-import { IField } from '../IField';
-import { IUnits } from '../IUnits';
+import { IFieldProps } from '../interfaces/IFieldProps';
+import Store from '../stores/RootStore';
 
-interface IProps {
-  field: IField;
-  value: number;
-  units: IUnits;
-  errors: string[] | false;
-  onFieldUpdate: (key: string, newValue: number) => void;
-  onFieldDirty: (key: string) => void;
-}
+const cleanString = value => {
+  return String(value).replace(/[^0-9.]/g, '');
+};
 
 const convertFromGrams = (value, weightUnit) => {
   if (value == null || value === '') return null;
@@ -35,50 +31,53 @@ const convertToGrams = (value, weightUnit) => {
 
   switch (weightUnit) {
     case 'kg':
-      return parseInt(String(value * 1000));
+      return parseInt(String(value * 1000), 10);
     case 'lb':
-      return parseInt(String(value * 453.592));
+      return parseInt(String(value * 453.592), 10);
     case 'oz':
-      return parseInt(String(value * 28.35));
+      return parseInt(String(value * 28.35), 10);
     default:
-      return parseInt(String(value));
+      return parseInt(String(value), 10);
   }
 };
 
-export default function({
-  field,
-  value,
-  units,
-  errors,
-  onFieldUpdate,
-  onFieldDirty
-}: IProps) {
-  const weightUnit = units.hasOwnProperty('weight') ? units.weight : 'kg';
+const Field = ({ field, parent }: IFieldProps) => {
+  const store = useContext(Store);
+  const value = store.getValue(field, parent);
+
+  const weightUnit = store.units.hasOwnProperty('weight')
+    ? store.units.weight
+    : 'kg';
 
   const [internalValue, setInternalValue] = useState(
     convertFromGrams(value, weightUnit)
   );
 
-  const onFieldBlur = () => {
-    onFieldUpdate(field.key, convertToGrams(internalValue, weightUnit));
-  };
+  useEffect(() => {
+    if (internalValue == null) return;
+
+    const convertedValue = convertToGrams(
+      parseFloat(internalValue),
+      weightUnit
+    );
+
+    store.updateValue(convertedValue, field, parent);
+  });
 
   const updateField = newValue => {
-    setInternalValue(newValue);
+    setInternalValue(cleanString(newValue));
   };
 
   const fieldProps = {
     value: internalValue,
-    type: 'text',
     suffix: weightUnit,
-    error: errors,
-    onChange: newValue => {
-      updateField(newValue);
-      onFieldDirty(field.key);
-    },
-    onBlur: () => onFieldBlur(),
+    error: store.getErrors(field, parent),
+    label: field.config['label'],
+    onChange: newValue => updateField(newValue),
     ...field.config
   };
 
   return <TextField {...fieldProps} />;
-}
+};
+
+export default observer(Field);

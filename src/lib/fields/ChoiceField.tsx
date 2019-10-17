@@ -1,46 +1,44 @@
-import * as React from 'react';
-import { ChoiceList } from '@shopify/polaris';
-import { IField } from '../IField';
+import * as React from "react";
+import { useContext } from "react";
+import Store from "../stores/RootStore";
+import { ChoiceList } from "@shopify/polaris";
+import { IField } from "../interfaces/IField";
+import { IParent } from "../interfaces/IParent";
+import { observer } from "mobx-react-lite";
 
 interface IProps {
   field: IField;
-  value: any;
-  errors: string[] | false;
-  onFieldUpdate: (key: string, newValue: boolean | string) => void;
-  onFieldDirty: (key: string) => void;
+  parent?: IParent;
 }
 
-export default function({
-  field,
-  value,
-  errors,
-  onFieldUpdate,
-  onFieldDirty
-}: IProps) {
+export default observer(function({ field, parent }: IProps) {
+  const store = useContext(Store);
+
+  let value = store.getValue(field, parent);
+
   if (!Array.isArray(value)) {
-    value = field.config.allowMultiple && value == null ? [] : [value];
+    value = field.config["allowMultiple"] && value == null ? [] : [value];
   }
 
   const updateValue = newValue => {
-    onFieldDirty(field.key);
-
+    let value;
     if (newValue.length === 0) {
-      onFieldUpdate(field.key, null);
-
-      return;
+      value = null;
+    } else {
+      value = field.config["allowMultiple"] ? newValue : newValue[0];
     }
 
-    let value = field.config.allowMultiple ? newValue : newValue[0];
-
-    onFieldUpdate(field.key, value);
+    store.updateValue(value, field, parent);
   };
 
   const fieldProps = {
     selected: value,
-    error: errors,
+    error: store.getErrors(field, parent),
+    title: field.config["title"],
+    choices: field.config["choices"],
     onChange: newValue => updateValue(newValue),
     ...field.config
   };
 
   return <ChoiceList {...fieldProps} />;
-}
+});

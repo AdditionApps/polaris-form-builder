@@ -1,31 +1,26 @@
 import * as React from "react";
+import { useContext } from "react";
+import Store from "../stores/RootStore";
 import { Checkbox } from "@shopify/polaris";
-import { IField } from "../IField";
+import { IField } from "../interfaces/IField";
+import { IParent } from "../interfaces/IParent";
+import { observer } from "mobx-react-lite";
 
 interface IProps {
   field: IField;
-  value: string;
-  errors: string[] | false;
-  onFieldUpdate: (key: string, newValue: boolean | string) => void;
-  onFieldDirty: (key: string) => void;
+  parent?: IParent;
 }
 
-export default function({
-  field,
-  value,
-  errors,
-  onFieldUpdate,
-  onFieldDirty
-}: IProps) {
+export default observer(function({ field, parent }: IProps) {
+  const store = useContext(Store);
+
   const fieldProps = {
-    checked: value,
-    error: errors,
-    onChange: newValue => {
-      onFieldUpdate(field.key, newValue);
-      onFieldDirty(field.key);
-    },
+    checked: store.getValue(field, parent),
+    error: store.getErrors(field, parent),
+    label: field.config["label"],
+    onChange: value => store.updateValue(value, field, parent),
     ...field.config
   };
 
   return <Checkbox {...fieldProps} />;
-}
+});

@@ -1,18 +1,10 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { observer } from 'mobx-react-lite';
 import { TextField } from '@shopify/polaris';
-import { IField } from '../IField';
-import { IUnits } from '../IUnits';
+import { IFieldProps } from '../interfaces/IFieldProps';
+import Store from '../stores/RootStore';
 const LocaleCurrency = require('locale-currency');
-
-interface IProps {
-  field: IField;
-  value: any;
-  units: IUnits;
-  errors: string[] | false;
-  onFieldUpdate: (key: string, newValue: string | number) => void;
-  onFieldDirty: (key: string) => void;
-}
 
 const getLocale = units => {
   return units && units.hasOwnProperty('locale')
@@ -33,8 +25,12 @@ const getFormatter = units => {
   });
 };
 
+const getFormatData = units => {
+  return getFormatter(units).resolvedOptions();
+};
+
 const getMultiplier = units => {
-  const formatData = getFormatter(units).resolvedOptions();
+  const formatData = getFormatData(units);
   return 10 ** formatData.minimumFractionDigits;
 };
 
@@ -43,22 +39,33 @@ const getFloatValue = (value: string) => {
   return parseFloat(val);
 };
 
-export default function({
-  field,
-  value,
-  units,
-  errors,
-  onFieldUpdate,
-  onFieldDirty
-}: IProps) {
-  const multiplier = getMultiplier(units);
+const cleanString = (value: string) => {
+  return value.replace(/[^0-9.]/g, '');
+};
+
+const Field = ({ field, parent }: IFieldProps) => {
+  const store = useContext(Store);
+  const multiplier = getMultiplier(store.units);
+  const value = store.getValue(field, parent);
   const focusValue = value ? String(value / multiplier) : null;
 
   const [focus, setFocus] = useState(false);
   const [internalValue, setInternalValue] = useState<string | null>(focusValue);
 
+  useEffect(() => {
+    if (internalValue == null) return;
+
+    const formatData = getFormatData(store.units);
+    const floatValue = parseFloat(cleanString(internalValue)).toFixed(
+      formatData.minimumFractionDigits
+    );
+    const updatedValue = multiplier * parseFloat(floatValue);
+    const convertedValue = parseInt(String(updatedValue), 10);
+    store.updateValue(convertedValue, field, parent);
+  });
+
   const blurValue = value
-    ? getFormatter(units).format(getFloatValue(internalValue))
+    ? getFormatter(store.units).format(getFloatValue(internalValue))
     : null;
 
   const formattedValue = focus ? internalValue : blurValue;
@@ -68,22 +75,17 @@ export default function({
   };
 
   const onFieldBlur = () => {
-    onFieldUpdate(
-      field.key,
-      parseInt(String(getFloatValue(String(internalValue)) * multiplier))
-    );
     setFocus(false);
   };
 
   const updateField = newValue => {
-    setInternalValue(String(newValue));
-    onFieldDirty(field.key);
+    setInternalValue(cleanString(String(newValue)));
   };
 
   const fieldProps = {
     value: formattedValue,
-    type: 'currency',
-    error: errors,
+    error: store.getErrors(field, parent),
+    label: field.config['label'],
     onChange: newValue => updateField(newValue),
     onFocus: () => onFieldFocus(),
     onBlur: () => onFieldBlur(),
@@ -91,4 +93,6 @@ export default function({
   };
 
   return <TextField {...fieldProps} />;
-}
+};
+
+export default observer(Field);

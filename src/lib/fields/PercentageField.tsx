@@ -1,17 +1,9 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import Store from '../stores/RootStore';
 import { TextField } from '@shopify/polaris';
-import { IField } from '../IField';
-import { IUnits } from '../IUnits';
-
-interface IProps {
-  field: IField;
-  value: number;
-  units: IUnits;
-  errors: string[] | false;
-  onFieldUpdate: (key: string, newValue: string | number) => void;
-  onFieldDirty: (key: string) => void;
-}
+import { IFieldProps } from '../interfaces/IFieldProps';
+import { observer } from 'mobx-react-lite';
 
 const getLocale = units => {
   return units && units.hasOwnProperty('locale')
@@ -26,16 +18,14 @@ const getFormatter = units => {
   });
 };
 
-const stripValue = value => {
+const cleanString = value => {
   return String(value).replace(/[^0-9.]/g, '');
 };
 
 const toDecimal = value => {
   if (value == null || value === '') return null;
 
-  let val = String(value).replace(/[^0-9.]/g, '');
-
-  return parseFloat(val) / 100;
+  return parseFloat(cleanString(value)) / 100;
 };
 
 const fromDecimal = value => {
@@ -44,21 +34,24 @@ const fromDecimal = value => {
   return value * 100;
 };
 
-export default function({
-  field,
-  value,
-  units,
-  errors,
-  onFieldUpdate,
-  onFieldDirty
-}: IProps) {
+const Field = ({ field, parent }: IFieldProps) => {
+  const store = useContext(Store);
+  const value = store.getValue(field, parent);
+
+  const [focus, setFocus] = useState(false);
   const [internalValue, setInternalValue] = useState<string>(
     String(fromDecimal(value))
   );
-  const [focus, setFocus] = useState(false);
+  useEffect(() => {
+    if (internalValue == null) return;
+
+    const convertedValue = toDecimal(internalValue);
+
+    store.updateValue(convertedValue, field, parent);
+  });
 
   const blurValue = value
-    ? getFormatter(units).format(toDecimal(internalValue))
+    ? getFormatter(store.units).format(toDecimal(internalValue))
     : null;
   const formattedValue = focus ? internalValue : blurValue;
 
@@ -67,19 +60,17 @@ export default function({
   };
 
   const onFieldBlur = () => {
-    onFieldUpdate(field.key, toDecimal(internalValue));
     setFocus(false);
   };
 
   const updateField = newValue => {
-    onFieldDirty(field.key);
-    setInternalValue(stripValue(newValue));
+    setInternalValue(cleanString(String(newValue)));
   };
 
   const fieldProps = {
     value: formattedValue,
-    type: 'currency',
-    error: errors,
+    error: store.getErrors(field, parent),
+    label: field.config['label'],
     onChange: newValue => updateField(newValue),
     onFocus: () => onFieldFocus(),
     onBlur: () => onFieldBlur(),
@@ -87,4 +78,6 @@ export default function({
   };
 
   return <TextField {...fieldProps} />;
-}
+};
+
+export default observer(Field);
