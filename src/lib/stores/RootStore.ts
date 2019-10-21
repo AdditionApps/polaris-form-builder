@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 import { toJS, observable, action } from 'mobx';
 import { computedFn } from 'mobx-utils';
+import { observer } from 'mobx-react-lite';
 import { IStore } from '../interfaces/IStore';
 import { IField } from '../interfaces/IField';
 import { IParent } from '../interfaces/IParent';
@@ -13,13 +14,24 @@ export class RootStore {
   @observable units: IUnits = {};
   onModelUpdate;
   fields;
+  customFieldInputs;
+  allFieldInputs;
 
-  @action init({ fields, model, errors, units, onModelUpdate }: IStore) {
+  @action init({
+    fields,
+    model,
+    errors,
+    units,
+    onModelUpdate,
+    customFields
+  }: IStore) {
     this.fields = fields;
     this.model = model;
     this.errors = errors;
     this.units = units;
     this.onModelUpdate = onModelUpdate;
+    this.customFieldInputs = customFields;
+    this.allFieldInputs = this.mergeInputs();
   }
 
   @action updateModelField(key: string, value: any) {
@@ -124,7 +136,18 @@ export class RootStore {
   getFieldName(field: IField) {
     let ucInput = field.input.charAt(0).toUpperCase() + field.input.slice(1);
 
-    return fieldInputs[ucInput + 'Field'];
+    return this.allFieldInputs[ucInput + 'Field'];
+  }
+
+  mergeInputs() {
+    const customFields = this.customFieldInputs ? this.customFieldInputs : [];
+
+    const mappedCustomFields = customFields.reduce((fields, field) => {
+      fields[field.name] = observer(field);
+      return fields;
+    }, {});
+
+    return Object.assign(mappedCustomFields, fieldInputs);
   }
 }
 
