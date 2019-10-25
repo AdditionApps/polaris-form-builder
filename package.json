@@ -52,7 +52,10 @@
   "dependencies": {
     "@shopify/polaris": "^4.6.0",
     "locale-currency": "0.0.2",
+    "lodash.clonedeep": "4.5.0",
+    "lodash.get": "4.4.2",
     "lodash.isequal": "4.5.0",
+    "lodash.set": "4.3.2",
     "mobx": "5.14.0",
     "mobx-react-lite": "1.4.1",
     "mobx-utils": "5.5.0",
