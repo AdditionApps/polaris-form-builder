@@ -1,12 +1,14 @@
-import { createContext } from 'react';
-import { toJS, observable, action } from 'mobx';
-import { computedFn } from 'mobx-utils';
-import { observer } from 'mobx-react-lite';
-import { IStore } from '../interfaces/IStore';
-import { IField } from '../interfaces/IField';
-import { IParent } from '../interfaces/IParent';
-import { IUnits } from '../interfaces/IUnits';
-import * as fieldInputs from '../fields';
+import { createContext } from "react";
+import { toJS, observable, action } from "mobx";
+import { computedFn } from "mobx-utils";
+import { observer } from "mobx-react-lite";
+import { IStore } from "../interfaces/IStore";
+import { IField } from "../interfaces/IField";
+import { IParent } from "../interfaces/IParent";
+import { IUnits } from "../interfaces/IUnits";
+import * as fieldInputs from "../fields";
+import _set from "lodash.set";
+import _get from "lodash.get";
 
 export class RootStore {
   @observable model = {};
@@ -34,94 +36,128 @@ export class RootStore {
     this.allFieldInputs = this.mergeInputs();
   }
 
-  @action updateModelField(key: string, value: any) {
-    value = value || value === 0 || value === false ? value : null;
-    this.model[key] = value;
-    delete this.errors[key];
+  @action updateValue(value, field: IField, ancestors: IParent[]) {
+    const valuePath = this.getPathFromAncestors(field, ancestors);
+    const errorPath = this.getDotNotationPathFromAncestors(field, ancestors);
+    _set(this.model, valuePath, value);
+    delete this.errors[errorPath];
     this.onModelUpdate(toJS(this.model));
   }
 
-  @action updateModelSubField(
-    parentKey: string,
-    index: number,
-    subFieldKey: string,
-    value: any
+  @action addRepeaterRow(
+    field: IField,
+    rowIndex: number,
+    ancestors?: IParent[]
   ) {
-    value = value || value === 0 || value === false ? value : null;
-    this.model[parentKey][index][subFieldKey] = value;
-    delete this.errors[`${parentKey}.${index}.${subFieldKey}`];
-    this.onModelUpdate(toJS(this.model));
-  }
-
-  @action addRepeaterRow(field: IField, rowIndex: number) {
     const blankRow = this.getBlankRepeaterRow(field);
-    if (this.model[field.key] == null || this.model[field.key].length === 0) {
-      this.model[field.key] = [blankRow];
+    const path = this.getPathFromAncestors(field, ancestors);
+
+    let currentValue = _get(toJS(this.model), path);
+    let hasRows = currentValue && currentValue.length;
+
+    if (hasRows) {
+      currentValue.splice(rowIndex + 1, 0, blankRow);
+      _set(this.model, path, currentValue);
       this.onModelUpdate(toJS(this.model));
       return;
     }
-    this.model[field.key].splice(rowIndex + 1, 0, blankRow);
+    _set(this.model, path, [blankRow]);
     this.onModelUpdate(toJS(this.model));
   }
 
-  @action removeRepeaterRow(field: IField, rowIndex: number) {
-    if (this.model[field.key].length === 1) {
-      this.model[field.key] = null;
-      this.deleteSubFieldError(field);
+  @action removeRepeaterRow(
+    field: IField,
+    rowIndex: number,
+    ancestors?: IParent[]
+  ) {
+    const path = this.getPathFromAncestors(field, ancestors);
+    const currentValue = _get(toJS(this.model), path);
+
+    let hasMultipleRows = currentValue.length > 1;
+
+    if (hasMultipleRows) {
+      currentValue.splice(rowIndex, 1);
+      _set(this.model, path, currentValue);
       this.onModelUpdate(toJS(this.model));
       return;
     }
 
-    this.model[field.key].splice(rowIndex, 1);
-    this.deleteSubFieldError(field, rowIndex);
+    _set(this.model, path, null);
+    this.deleteErrorsForRow(field, rowIndex);
     this.onModelUpdate(toJS(this.model));
   }
 
-  @action deleteSubFieldError(field: IField, rowIndex: number = null) {
-    if (rowIndex || rowIndex === 0) {
-      Object.keys(this.errors)
-        .filter(key => key.startsWith(`${field.key}.${rowIndex}.`))
-        .forEach(errorKey => delete this.errors[errorKey]);
-      return;
-    }
+  @action deleteErrorsForRow(field: IField, rowIndex: number) {
     Object.keys(this.errors)
-      .filter(key => key.startsWith(`${field.key}.`))
+      .filter(key => key.includes(`${field.key}.${rowIndex}.`))
       .forEach(errorKey => delete this.errors[errorKey]);
+    return;
   }
 
-  updateValue(value, field: IField, parent: IParent = null) {
-    if (parent) {
-      this.updateModelSubField(
-        parent.field.key,
-        parent.index,
-        field.key,
-        value
-      );
-      return;
+  getValue = computedFn(function getValue(
+    field: IField,
+    ancestors?: IParent[]
+  ) {
+    const path = this.getPathFromAncestors(field, ancestors);
+
+    if (ancestors) {
+      return this.getLengthCheckedValue(path, ancestors);
     }
-    this.updateModelField(field.key, value);
+    const val = _get(this.model, path);
+
+    return val;
+  });
+
+  getErrors = computedFn(function getErrors(
+    field: IField,
+    ancestors?: IParent[]
+  ) {
+    const path = this.getDotNotationPathFromAncestors(field, ancestors);
+    return _get(this.errors, path);
+  });
+
+  getPathFromAncestors(field: IField, ancestors: IParent[] = []) {
+    let path = ancestors.reduce((acc: string, ancestor: IParent) => {
+      return `${acc}.${ancestor.field.key}[${ancestor.index}]`;
+    }, "");
+    return `${path}.${field.key}`.substr(1);
   }
 
-  getValue = computedFn(function getValue(field: IField, parent: IParent) {
-    if (parent) {
-      if (this.model[parent.field.key].length >= parent.index + 1) {
-        return this.model[parent.field.key][parent.index][field.key];
-      }
-      return;
-    }
-    return this.model[field.key];
-  });
+  getDotNotationPathFromAncestors(field: IField, ancestors: IParent[] = []) {
+    let path = ancestors.reduce((acc: string, ancestor: IParent) => {
+      return `${acc}.${ancestor.field.key}.${ancestor.index}`;
+    }, "");
+    return `${path}.${field.key}`.substr(1);
+  }
 
-  getErrors = computedFn(function getErrors(field: IField, parent: IParent) {
-    if (parent) {
-      return this.errors[`${parent.field.key}.${parent.index}.${field.key}`];
+  getLengthCheckedValue(path: string, ancestors: IParent[]) {
+    const ancestorsCopy = ancestors.slice();
+    const lastAncestor = ancestorsCopy.pop();
+    const lastAncestorPath = this.getPathFromAncestors(
+      lastAncestor.field,
+      ancestorsCopy
+    );
+    const lastAncestorValue = _get(this.model, lastAncestorPath);
+    // Here we are ensuring that mobx doesn't throw a warning
+    // about an index being out of bounds when a repeater row
+    // is deleted
+    if (lastAncestorValue.length >= lastAncestor.index + 1) {
+      return _get(this.model, path);
     }
-    return this.errors[field.key];
-  });
+    return;
+  }
 
   getBlankRepeaterRow(field: IField) {
     return field.subFields
-      .map((field: IField) => {
+      .flatMap((field: IField) => {
+        if (field.input === "group") {
+          return field.subFields.map(subField => {
+            return {
+              key: subField.key,
+              value: subField.defaultValue || null
+            };
+          });
+        }
         return {
           key: field.key,
           value: field.defaultValue || null
@@ -136,7 +172,7 @@ export class RootStore {
   getFieldName(field: IField) {
     let ucInput = field.input.charAt(0).toUpperCase() + field.input.slice(1);
 
-    return this.allFieldInputs[ucInput + 'Field'];
+    return this.allFieldInputs[ucInput + "Field"];
   }
 
   mergeInputs() {
@@ -147,7 +183,13 @@ export class RootStore {
       return fields;
     }, {});
 
+    console.log(mappedCustomFields);
+
     return Object.assign(mappedCustomFields, fieldInputs);
+  }
+
+  toJS(value) {
+    return value.toJS();
   }
 }
 
