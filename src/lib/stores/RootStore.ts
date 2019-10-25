@@ -1,14 +1,14 @@
-import { createContext } from "react";
-import { toJS, observable, action } from "mobx";
-import { computedFn } from "mobx-utils";
-import { observer } from "mobx-react-lite";
-import { IStore } from "../interfaces/IStore";
-import { IField } from "../interfaces/IField";
-import { IParent } from "../interfaces/IParent";
-import { IUnits } from "../interfaces/IUnits";
-import * as fieldInputs from "../fields";
-import _set from "lodash.set";
-import _get from "lodash.get";
+import { createContext } from 'react';
+import { toJS, observable, action } from 'mobx';
+import { computedFn } from 'mobx-utils';
+import { observer } from 'mobx-react-lite';
+import { IStore } from '../interfaces/IStore';
+import { IField } from '../interfaces/IField';
+import { IParent } from '../interfaces/IParent';
+import { IUnits } from '../interfaces/IUnits';
+import * as fieldInputs from '../fields';
+import _set from 'lodash.set';
+import _get from 'lodash.get';
 
 export class RootStore {
   @observable model = {};
@@ -119,14 +119,14 @@ export class RootStore {
   getPathFromAncestors(field: IField, ancestors: IParent[] = []) {
     let path = ancestors.reduce((acc: string, ancestor: IParent) => {
       return `${acc}.${ancestor.field.key}[${ancestor.index}]`;
-    }, "");
+    }, '');
     return `${path}.${field.key}`.substr(1);
   }
 
   getDotNotationPathFromAncestors(field: IField, ancestors: IParent[] = []) {
     let path = ancestors.reduce((acc: string, ancestor: IParent) => {
       return `${acc}.${ancestor.field.key}.${ancestor.index}`;
-    }, "");
+    }, '');
     return `${path}.${field.key}`.substr(1);
   }
 
@@ -150,7 +150,7 @@ export class RootStore {
   getBlankRepeaterRow(field: IField) {
     return field.subFields
       .flatMap((field: IField) => {
-        if (field.input === "group") {
+        if (field.input === 'group') {
           return field.subFields.map(subField => {
             return {
               key: subField.key,
@@ -172,7 +172,7 @@ export class RootStore {
   getFieldName(field: IField) {
     let ucInput = field.input.charAt(0).toUpperCase() + field.input.slice(1);
 
-    return this.allFieldInputs[ucInput + "Field"];
+    return this.allFieldInputs[ucInput + 'Field'];
   }
 
   mergeInputs() {
@@ -186,10 +186,6 @@ export class RootStore {
     console.log(mappedCustomFields);
 
     return Object.assign(mappedCustomFields, fieldInputs);
-  }
-
-  toJS(value) {
-    return value.toJS();
   }
 }
 
