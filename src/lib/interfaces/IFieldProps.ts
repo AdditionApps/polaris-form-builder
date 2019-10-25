@@ -3,5 +3,5 @@ import { IParent } from "./IParent";
 
 export interface IFieldProps {
   field: IField;
-  parent?: IParent;
+  ancestors?: IParent[];
 }

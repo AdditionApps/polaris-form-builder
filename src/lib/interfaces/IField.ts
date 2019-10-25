@@ -6,7 +6,8 @@ export interface IField {
   subFields?: IField[];
   title?: string;
   emptyMessage?: string;
-  layout?: 'stacked' | 'grouped' | 'condensed';
+  layout?: "stacked" | "grouped" | "condensed";
+  addButtonText?: string;
   infoMessage?: string;
   infoMessageCondition?: boolean;
 }
