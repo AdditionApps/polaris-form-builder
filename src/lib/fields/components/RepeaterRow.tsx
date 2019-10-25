@@ -6,12 +6,16 @@ import { CirclePlusMajorMonotone } from "@shopify/polaris-icons";
 import { IField } from "../../interfaces/IField";
 import { IParent } from "../../interfaces/IParent";
 import Store from "../../stores/RootStore";
+import _cloneDeep from "lodash.clonedeep";
+const shortid = require("shortid");
 
 interface IProps {
-  parent: IParent;
+  field: IField;
+  ancestors?: IParent[];
+  index: number;
 }
 
-const Row = ({ parent }: IProps) => {
+const Row = ({ field, ancestors, index }: IProps) => {
   const store = useContext(Store);
 
   const wrapperStyle = {
@@ -24,15 +28,18 @@ const Row = ({ parent }: IProps) => {
     marginBottom: "2rem"
   };
 
-  const fields = parent.field.subFields.map(
-    (subField: IField, index: number) => {
-      const Field = store.getFieldName(subField);
-      return <Field field={subField} parent={parent} key={index} />;
-    }
-  );
+  const updatedAncestors = ancestors ? _cloneDeep(ancestors) : [];
+
+  updatedAncestors.push({ field, index });
+
+  const fields = field.subFields.map((subField: IField) => {
+    const Field = store.getFieldName(subField);
+    const id = shortid.generate();
+    return <Field field={subField} ancestors={updatedAncestors} key={id} />;
+  });
 
   const getFieldLayout = () => {
-    switch (parent.field.layout) {
+    switch (field.layout) {
       case "stacked":
         return <FormLayout>{fields}</FormLayout>;
       case "grouped":
@@ -61,18 +68,16 @@ const Row = ({ parent }: IProps) => {
             <Button
               plain
               icon={CirclePlusMajorMonotone}
-              onClick={() => store.addRepeaterRow(parent.field, parent.index)}
+              onClick={() => store.addRepeaterRow(field, index, ancestors)}
             >
-              Add row
+              {field.addButtonText ? field.addButtonText : "Add row"}
             </Button>
           </Stack.Item>
           <Stack.Item>
             <Button
               plain
               destructive
-              onClick={() =>
-                store.removeRepeaterRow(parent.field, parent.index)
-              }
+              onClick={() => store.removeRepeaterRow(field, index, ancestors)}
             >
               Remove
             </Button>

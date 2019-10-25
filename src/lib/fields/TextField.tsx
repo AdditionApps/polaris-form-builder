@@ -1,18 +1,18 @@
-import * as React from 'react';
-import { useContext } from 'react';
-import { observer } from 'mobx-react-lite';
-import { TextField } from '@shopify/polaris';
-import { IFieldProps } from '../interfaces/IFieldProps';
-import Store from '../stores/RootStore';
+import * as React from "react";
+import { useContext } from "react";
+import { observer } from "mobx-react-lite";
+import { TextField } from "@shopify/polaris";
+import { IFieldProps } from "../interfaces/IFieldProps";
+import Store from "../stores/RootStore";
 
-const Field = ({ field, parent }: IFieldProps) => {
+const Field = ({ field, ancestors }: IFieldProps) => {
   const store = useContext(Store);
 
   const fieldProps = {
-    value: store.getValue(field, parent),
-    error: store.getErrors(field, parent),
-    label: field.config['label'],
-    onChange: value => store.updateValue(value, field, parent),
+    value: store.getValue(field, ancestors),
+    error: store.getErrors(field, ancestors),
+    label: field.config["label"],
+    onChange: value => store.updateValue(value, field, ancestors),
     ...field.config
   };
 

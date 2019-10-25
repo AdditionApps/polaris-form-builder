@@ -2,23 +2,17 @@ import * as React from "react";
 import { useContext } from "react";
 import Store from "../stores/RootStore";
 import { Checkbox } from "@shopify/polaris";
-import { IField } from "../interfaces/IField";
-import { IParent } from "../interfaces/IParent";
 import { observer } from "mobx-react-lite";
+import { IFieldProps } from "../interfaces/IFieldProps";
 
-interface IProps {
-  field: IField;
-  parent?: IParent;
-}
-
-export default observer(function({ field, parent }: IProps) {
+export default observer(function({ field, ancestors }: IFieldProps) {
   const store = useContext(Store);
 
   const fieldProps = {
-    checked: store.getValue(field, parent),
-    error: store.getErrors(field, parent),
+    checked: store.getValue(field, ancestors),
+    error: store.getErrors(field, ancestors),
     label: field.config["label"],
-    onChange: value => store.updateValue(value, field, parent),
+    onChange: value => store.updateValue(value, field, ancestors),
     ...field.config
   };
 

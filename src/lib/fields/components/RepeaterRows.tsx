@@ -2,23 +2,28 @@ import * as React from "react";
 import { useContext } from "react";
 import { observer } from "mobx-react-lite";
 import { IField } from "../../interfaces/IField";
+import { IParent } from "../../interfaces/IParent";
 import RepeaterRow from "./RepeaterRow";
 import Store from "../../stores/RootStore";
 const shortid = require("shortid");
 
 interface IProps {
   field: IField;
+  ancestors?: IParent[];
 }
 
-const Rows = ({ field }: IProps) => {
+const Rows = ({ field, ancestors }: IProps) => {
   const store = useContext(Store);
+  const rows = store.getValue(field, ancestors);
 
-  const rows = store.model[field.key].map((row: object, index: number) => {
+  const rowLayout = rows.map((row: object, index: number) => {
     const id = shortid.generate();
-    return <RepeaterRow parent={{ field, index }} key={id} />;
+    return (
+      <RepeaterRow field={field} ancestors={ancestors} index={index} key={id} />
+    );
   });
 
-  return rows;
+  return rowLayout;
 };
 
 export default observer(Rows);

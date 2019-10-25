@@ -7,13 +7,14 @@ import { IFieldProps } from "../interfaces/IFieldProps";
 import RepeaterRows from "./components/RepeaterRows";
 import Store from "../stores/RootStore";
 
-const Field = ({ field }: IFieldProps) => {
+const Field = ({ field, ancestors }: IFieldProps) => {
   const store = useContext(Store);
 
-  const showEmptyState =
-    store.model[field.key] == null || store.model[field.key].length === 0;
+  const rows = store.getValue(field, ancestors);
 
-  const emptyState = (
+  const showEmptyState = rows == null || rows.length === 0;
+
+  const emptyStateLayout = (
     <Stack vertical spacing="loose">
       {field.emptyMessage && (
         <Stack.Item>
@@ -24,15 +25,15 @@ const Field = ({ field }: IFieldProps) => {
         <Button
           plain
           icon={CirclePlusMajorMonotone}
-          onClick={() => store.addRepeaterRow(field, 0)}
+          onClick={() => store.addRepeaterRow(field, 0, ancestors)}
         >
-          Add row
+          {field.addButtonText ? field.addButtonText : "Add row"}
         </Button>
       </Stack.Item>
     </Stack>
   );
 
-  const rows = <RepeaterRows field={field} />;
+  const rowLayout = <RepeaterRows field={field} ancestors={ancestors} />;
 
   return (
     <Stack vertical spacing="loose">
@@ -43,7 +44,7 @@ const Field = ({ field }: IFieldProps) => {
           </TextContainer>
         </Stack.Item>
       )}
-      {showEmptyState ? emptyState : rows}
+      {showEmptyState ? emptyStateLayout : rowLayout}
     </Stack>
   );
 };

@@ -5,10 +5,10 @@ import { Select } from "@shopify/polaris";
 import { IFieldProps } from "../interfaces/IFieldProps";
 import Store from "../stores/RootStore";
 
-const Field = ({ field, parent }: IFieldProps) => {
+const Field = ({ field, ancestors }: IFieldProps) => {
   const store = useContext(Store);
 
-  let value = store.getValue(field, parent);
+  let value = store.getValue(field, ancestors);
 
   if (value == null) {
     value = field.config["options"][0].value;
@@ -16,9 +16,9 @@ const Field = ({ field, parent }: IFieldProps) => {
 
   const fieldProps = {
     value: value,
-    error: store.getErrors(field, parent),
+    error: store.getErrors(field, ancestors),
     label: field.config["label"],
-    onChange: value => store.updateValue(value, field, parent),
+    onChange: value => store.updateValue(value, field, ancestors),
     ...field.config
   };
 

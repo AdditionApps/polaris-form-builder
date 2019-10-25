@@ -2,19 +2,13 @@ import * as React from "react";
 import { useContext } from "react";
 import Store from "../stores/RootStore";
 import { ChoiceList } from "@shopify/polaris";
-import { IField } from "../interfaces/IField";
-import { IParent } from "../interfaces/IParent";
 import { observer } from "mobx-react-lite";
+import { IFieldProps } from "../interfaces/IFieldProps";
 
-interface IProps {
-  field: IField;
-  parent?: IParent;
-}
-
-export default observer(function({ field, parent }: IProps) {
+export default observer(function({ field, ancestors }: IFieldProps) {
   const store = useContext(Store);
 
-  let value = store.getValue(field, parent);
+  let value = store.getValue(field, ancestors);
 
   if (!Array.isArray(value)) {
     value = field.config["allowMultiple"] && value == null ? [] : [value];
@@ -28,12 +22,12 @@ export default observer(function({ field, parent }: IProps) {
       value = field.config["allowMultiple"] ? newValue : newValue[0];
     }
 
-    store.updateValue(value, field, parent);
+    store.updateValue(value, field, ancestors);
   };
 
   const fieldProps = {
     selected: value,
-    error: store.getErrors(field, parent),
+    error: store.getErrors(field, ancestors),
     title: field.config["title"],
     choices: field.config["choices"],
     onChange: newValue => updateValue(newValue),

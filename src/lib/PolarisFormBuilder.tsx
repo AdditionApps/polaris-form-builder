@@ -1,10 +1,10 @@
-import * as React from 'react';
-import { memo, useContext } from 'react';
-import { IField } from './interfaces/IField';
-import { IStore } from './interfaces/IStore';
-import { FormLayout } from '@shopify/polaris';
-import StoreContext from './stores/RootStore';
-import isEqual from 'lodash.isequal';
+import * as React from "react";
+import { memo, useContext } from "react";
+import { IField } from "./interfaces/IField";
+import { IStore } from "./interfaces/IStore";
+import { FormLayout } from "@shopify/polaris";
+import StoreContext from "./stores/RootStore";
+import _isEqual from "lodash.isequal";
 
 const FormBuilder = (props: IStore) => {
   const store = useContext(StoreContext);
@@ -25,9 +25,9 @@ const FormBuilder = (props: IStore) => {
 
 const propsEqual = (prev, next) => {
   return (
-    isEqual(prev.fields, next.fields) &&
-    isEqual(prev.units, next.units) &&
-    isEqual(prev.errors, next.errors)
+    _isEqual(prev.fields, next.fields) &&
+    _isEqual(prev.units, next.units) &&
+    _isEqual(prev.errors, next.errors)
   );
 };
 

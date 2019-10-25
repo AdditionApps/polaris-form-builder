@@ -1,24 +1,24 @@
-import * as React from 'react';
-import { useState, useEffect, useContext } from 'react';
-import { observer } from 'mobx-react-lite';
-import { TextField } from '@shopify/polaris';
-import { IFieldProps } from '../interfaces/IFieldProps';
-import Store from '../stores/RootStore';
+import * as React from "react";
+import { useState, useEffect, useContext } from "react";
+import { observer } from "mobx-react-lite";
+import { TextField } from "@shopify/polaris";
+import { IFieldProps } from "../interfaces/IFieldProps";
+import Store from "../stores/RootStore";
 
 const cleanString = value => {
-  return String(value).replace(/[^0-9.]/g, '');
+  return String(value).replace(/[^0-9.]/g, "");
 };
 
 const convertFromGrams = (value, weightUnit) => {
-  if (value == null || value === '') return null;
+  if (value == null || value === "") return null;
 
   switch (weightUnit) {
-    case 'kg':
+    case "kg":
       return value / 1000;
-    case 'lb':
+    case "lb":
       let lb = value * 0.00220462;
       return lb.toFixed(2);
-    case 'oz':
+    case "oz":
       let oz = value * 0.035274;
       return oz.toFixed(2);
     default:
@@ -27,27 +27,27 @@ const convertFromGrams = (value, weightUnit) => {
 };
 
 const convertToGrams = (value, weightUnit) => {
-  if (value == null || value === '') return null;
+  if (value == null || value === "") return null;
 
   switch (weightUnit) {
-    case 'kg':
+    case "kg":
       return parseInt(String(value * 1000), 10);
-    case 'lb':
+    case "lb":
       return parseInt(String(value * 453.592), 10);
-    case 'oz':
+    case "oz":
       return parseInt(String(value * 28.35), 10);
     default:
       return parseInt(String(value), 10);
   }
 };
 
-const Field = ({ field, parent }: IFieldProps) => {
+const Field = ({ field, ancestors }: IFieldProps) => {
   const store = useContext(Store);
-  const value = store.getValue(field, parent);
+  const value = store.getValue(field, ancestors);
 
-  const weightUnit = store.units.hasOwnProperty('weight')
+  const weightUnit = store.units.hasOwnProperty("weight")
     ? store.units.weight
-    : 'kg';
+    : "kg";
 
   const [internalValue, setInternalValue] = useState(
     convertFromGrams(value, weightUnit)
@@ -61,7 +61,7 @@ const Field = ({ field, parent }: IFieldProps) => {
       weightUnit
     );
 
-    store.updateValue(convertedValue, field, parent);
+    store.updateValue(convertedValue, field, ancestors);
   });
 
   const updateField = newValue => {
@@ -71,8 +71,8 @@ const Field = ({ field, parent }: IFieldProps) => {
   const fieldProps = {
     value: internalValue,
     suffix: weightUnit,
-    error: store.getErrors(field, parent),
-    label: field.config['label'],
+    error: store.getErrors(field, ancestors),
+    label: field.config["label"],
     onChange: newValue => updateField(newValue),
     ...field.config
   };
