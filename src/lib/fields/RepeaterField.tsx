@@ -3,11 +3,11 @@ import { useContext } from "react";
 import { observer } from "mobx-react-lite";
 import { Subheading, TextContainer, Button, Stack } from "@shopify/polaris";
 import { CirclePlusMajorMonotone } from "@shopify/polaris-icons";
-import { IFieldProps } from "../interfaces/IFieldProps";
+import { FormFieldProps } from "../interfaces/FormFieldProps";
 import RepeaterRows from "./components/RepeaterRows";
 import Store from "../stores/RootStore";
 
-const Field = ({ field, ancestors }: IFieldProps) => {
+const Field = ({ field, ancestors }: FormFieldProps) => {
   const store = useContext(Store);
 
   const rows = store.getValue(field, ancestors);

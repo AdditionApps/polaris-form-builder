@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState, useEffect, useContext } from "react";
 import { observer } from "mobx-react-lite";
 import { TextField } from "@shopify/polaris";
-import { IFieldProps } from "../interfaces/IFieldProps";
+import { FormFieldProps } from "../interfaces/FormFieldProps";
 import Store from "../stores/RootStore";
 
 const cleanString = value => {
@@ -41,7 +41,7 @@ const convertToGrams = (value, weightUnit) => {
   }
 };
 
-const Field = ({ field, ancestors }: IFieldProps) => {
+const Field = ({ field, ancestors }: FormFieldProps) => {
   const store = useContext(Store);
   const value = store.getValue(field, ancestors);
 

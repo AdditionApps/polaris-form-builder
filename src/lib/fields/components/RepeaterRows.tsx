@@ -1,15 +1,15 @@
-import * as React from "react";
-import { useContext } from "react";
-import { observer } from "mobx-react-lite";
-import { IField } from "../../interfaces/IField";
-import { IParent } from "../../interfaces/IParent";
-import RepeaterRow from "./RepeaterRow";
-import Store from "../../stores/RootStore";
-const shortid = require("shortid");
+import * as React from 'react';
+import { useContext } from 'react';
+import { observer } from 'mobx-react-lite';
+import { FormField } from '../../interfaces/FormField';
+import { FormFieldParent } from '../../interfaces/FormFieldParent';
+import RepeaterRow from './RepeaterRow';
+import Store from '../../stores/RootStore';
+const shortid = require('shortid');
 
 interface IProps {
-  field: IField;
-  ancestors?: IParent[];
+  field: FormField;
+  ancestors?: FormFieldParent[];
 }
 
 const Rows = ({ field, ancestors }: IProps) => {

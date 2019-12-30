@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState, useEffect, useContext } from "react";
 import Store from "../stores/RootStore";
 import { TextField } from "@shopify/polaris";
-import { IFieldProps } from "../interfaces/IFieldProps";
+import { FormFieldProps } from "../interfaces/FormFieldProps";
 import { observer } from "mobx-react-lite";
 
 const getLocale = units => {
@@ -34,7 +34,7 @@ const fromDecimal = value => {
   return value * 100;
 };
 
-const Field = ({ field, ancestors }: IFieldProps) => {
+const Field = ({ field, ancestors }: FormFieldProps) => {
   const store = useContext(Store);
   const value = store.getValue(field, ancestors);
 

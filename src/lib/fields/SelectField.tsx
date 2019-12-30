@@ -2,10 +2,10 @@ import * as React from "react";
 import { useContext } from "react";
 import { observer } from "mobx-react-lite";
 import { Select } from "@shopify/polaris";
-import { IFieldProps } from "../interfaces/IFieldProps";
+import { FormFieldProps } from "../interfaces/FormFieldProps";
 import Store from "../stores/RootStore";
 
-const Field = ({ field, ancestors }: IFieldProps) => {
+const Field = ({ field, ancestors }: FormFieldProps) => {
   const store = useContext(Store);
 
   let value = store.getValue(field, ancestors);

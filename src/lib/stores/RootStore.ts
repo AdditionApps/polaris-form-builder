@@ -2,10 +2,10 @@ import { createContext } from 'react';
 import { toJS, observable, action } from 'mobx';
 import { computedFn } from 'mobx-utils';
 import { observer } from 'mobx-react-lite';
-import { IStore } from '../interfaces/IStore';
-import { IField } from '../interfaces/IField';
-import { IParent } from '../interfaces/IParent';
-import { IUnits } from '../interfaces/IUnits';
+import { Store } from '../interfaces/Store';
+import { FormField } from '../interfaces/FormField';
+import { FormFieldParent } from '../interfaces/FormFieldParent';
+import { FormUnits } from '../interfaces/FormUnits';
 import * as fieldInputs from '../fields';
 import _set from 'lodash.set';
 import _get from 'lodash.get';
@@ -13,7 +13,7 @@ import _get from 'lodash.get';
 export class RootStore {
   @observable model = {};
   @observable errors = {};
-  @observable units: IUnits = {};
+  @observable units: FormUnits = {};
   onModelUpdate;
   fields;
   customFieldInputs;
@@ -26,7 +26,7 @@ export class RootStore {
     units,
     onModelUpdate,
     customFields
-  }: IStore) {
+  }: Store) {
     this.fields = fields;
     this.model = model;
     this.errors = errors;
@@ -36,7 +36,7 @@ export class RootStore {
     this.allFieldInputs = this.mergeInputs();
   }
 
-  @action updateValue(value, field: IField, ancestors: IParent[]) {
+  @action updateValue(value, field: FormField, ancestors: FormFieldParent[]) {
     const valuePath = this.getPathFromAncestors(field, ancestors);
     const errorPath = this.getDotNotationPathFromAncestors(field, ancestors);
     _set(this.model, valuePath, value);
@@ -45,9 +45,9 @@ export class RootStore {
   }
 
   @action addRepeaterRow(
-    field: IField,
+    field: FormField,
     rowIndex: number,
-    ancestors?: IParent[]
+    ancestors?: FormFieldParent[]
   ) {
     const blankRow = this.getBlankRepeaterRow(field);
     const path = this.getPathFromAncestors(field, ancestors);
@@ -66,9 +66,9 @@ export class RootStore {
   }
 
   @action removeRepeaterRow(
-    field: IField,
+    field: FormField,
     rowIndex: number,
-    ancestors?: IParent[]
+    ancestors?: FormFieldParent[]
   ) {
     const path = this.getPathFromAncestors(field, ancestors);
     const currentValue = _get(toJS(this.model), path);
@@ -87,7 +87,7 @@ export class RootStore {
     this.onModelUpdate(toJS(this.model));
   }
 
-  @action deleteErrorsForRow(field: IField, rowIndex: number) {
+  @action deleteErrorsForRow(field: FormField, rowIndex: number) {
     Object.keys(this.errors)
       .filter(key => key.includes(`${field.key}.${rowIndex}.`))
       .forEach(errorKey => delete this.errors[errorKey]);
@@ -95,8 +95,8 @@ export class RootStore {
   }
 
   getValue = computedFn(function getValue(
-    field: IField,
-    ancestors?: IParent[]
+    field: FormField,
+    ancestors?: FormFieldParent[]
   ) {
     const path = this.getPathFromAncestors(field, ancestors);
 
@@ -109,28 +109,31 @@ export class RootStore {
   });
 
   getErrors = computedFn(function getErrors(
-    field: IField,
-    ancestors?: IParent[]
+    field: FormField,
+    ancestors?: FormFieldParent[]
   ) {
     const path = this.getDotNotationPathFromAncestors(field, ancestors);
     return _get(this.errors, path);
   });
 
-  getPathFromAncestors(field: IField, ancestors: IParent[] = []) {
-    let path = ancestors.reduce((acc: string, ancestor: IParent) => {
+  getPathFromAncestors(field: FormField, ancestors: FormFieldParent[] = []) {
+    let path = ancestors.reduce((acc: string, ancestor: FormFieldParent) => {
       return `${acc}.${ancestor.field.key}[${ancestor.index}]`;
     }, '');
     return `${path}.${field.key}`.substr(1);
   }
 
-  getDotNotationPathFromAncestors(field: IField, ancestors: IParent[] = []) {
-    let path = ancestors.reduce((acc: string, ancestor: IParent) => {
+  getDotNotationPathFromAncestors(
+    field: FormField,
+    ancestors: FormFieldParent[] = []
+  ) {
+    let path = ancestors.reduce((acc: string, ancestor: FormFieldParent) => {
       return `${acc}.${ancestor.field.key}.${ancestor.index}`;
     }, '');
     return `${path}.${field.key}`.substr(1);
   }
 
-  getLengthCheckedValue(path: string, ancestors: IParent[]) {
+  getLengthCheckedValue(path: string, ancestors: FormFieldParent[]) {
     const ancestorsCopy = ancestors.slice();
     const lastAncestor = ancestorsCopy.pop();
     const lastAncestorPath = this.getPathFromAncestors(
@@ -147,9 +150,9 @@ export class RootStore {
     return;
   }
 
-  getBlankRepeaterRow(field: IField) {
+  getBlankRepeaterRow(field: FormField) {
     return field.subFields
-      .flatMap((field: IField) => {
+      .flatMap((field: FormField) => {
         if (field.input === 'group') {
           return field.subFields.map(subField => {
             return {
@@ -169,7 +172,7 @@ export class RootStore {
       }, {});
   }
 
-  getFieldName(field: IField) {
+  getFieldName(field: FormField) {
     let ucInput = field.input.charAt(0).toUpperCase() + field.input.slice(1);
 
     return this.allFieldInputs[ucInput + 'Field'];

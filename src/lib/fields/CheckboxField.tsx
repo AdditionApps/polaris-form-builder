@@ -3,9 +3,9 @@ import { useContext } from "react";
 import Store from "../stores/RootStore";
 import { Checkbox } from "@shopify/polaris";
 import { observer } from "mobx-react-lite";
-import { IFieldProps } from "../interfaces/IFieldProps";
+import { FormFieldProps } from "../interfaces/FormFieldProps";
 
-export default observer(function({ field, ancestors }: IFieldProps) {
+export default observer(function({ field, ancestors }: FormFieldProps) {
   const store = useContext(Store);
 
   const fieldProps = {

@@ -1,9 +1,9 @@
-export interface IField {
+export interface FormField {
   key: string;
   input: string;
   config?: object;
   defaultValue?: any;
-  subFields?: IField[];
+  subFields?: FormField[];
   title?: string;
   emptyMessage?: string;
   layout?: "stacked" | "grouped" | "condensed";

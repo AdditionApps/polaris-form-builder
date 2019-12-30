@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState, useEffect, useContext } from "react";
 import { observer } from "mobx-react-lite";
 import { TextField } from "@shopify/polaris";
-import { IFieldProps } from "../interfaces/IFieldProps";
+import { FormFieldProps } from "../interfaces/FormFieldProps";
 import Store from "../stores/RootStore";
 const LocaleCurrency = require("locale-currency");
 
@@ -43,7 +43,7 @@ const cleanString = (value: string) => {
   return value.replace(/[^0-9.]/g, "");
 };
 
-const Field = ({ field, ancestors }: IFieldProps) => {
+const Field = ({ field, ancestors }: FormFieldProps) => {
   const store = useContext(Store);
 
   const multiplier = getMultiplier(store.units);
