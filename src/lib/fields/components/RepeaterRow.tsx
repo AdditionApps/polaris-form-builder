@@ -3,14 +3,14 @@ import { useContext } from 'react';
 import { observer } from 'mobx-react-lite';
 import { FormLayout, Button, Stack } from '@shopify/polaris';
 import { CirclePlusMajorMonotone } from '@shopify/polaris-icons';
-import { FormUnits } from '../../interfaces/FormUnits';
+import { FormField } from '../../interfaces/FormField';
 import { FormFieldParent } from '../../interfaces/FormFieldParent';
 import Store from '../../stores/RootStore';
 import _cloneDeep from 'lodash.clonedeep';
 const shortid = require('shortid');
 
 interface IProps {
-  field: FormUnits;
+  field: FormField;
   ancestors?: FormFieldParent[];
   index: number;
 }

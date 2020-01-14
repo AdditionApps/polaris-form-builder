@@ -186,8 +186,6 @@ export class RootStore {
       return fields;
     }, {});
 
-    console.log(mappedCustomFields);
-
     return Object.assign(mappedCustomFields, fieldInputs);
   }
 }
