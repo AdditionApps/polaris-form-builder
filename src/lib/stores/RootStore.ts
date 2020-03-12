@@ -105,6 +105,10 @@ export class RootStore {
     }
     const val = _get(this.model, path);
 
+    if (['text', 'money', 'weight', 'percentage'].includes(field.input)) {
+      return val.toString();
+    }
+
     return val;
   });
 
