@@ -1,6 +1,6 @@
 {
   "name": "@additionapps/polaris-form-builder",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A config-driven form builder for Shopify applications using the Polaris library",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
