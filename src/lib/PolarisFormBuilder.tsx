@@ -13,9 +13,8 @@ const FormBuilder = (props: Store) => {
   return (
     <StoreContext.Provider value={store}>
       <FormLayout>
-        {props.fields.map((field: FormField, index: number) => {
+        {store.fields.map((field: FormField, index: number) => {
           const Field = store.getFieldName(field);
-
           return <Field field={field} key={index} />;
         })}
       </FormLayout>

@@ -14,10 +14,10 @@ export class RootStore {
   @observable model = {};
   @observable errors = {};
   @observable units: FormUnits = {};
+  @observable allFieldInputs;
   onModelUpdate;
   fields;
   customFieldInputs;
-  allFieldInputs;
 
   @action init({
     fields,
@@ -105,7 +105,10 @@ export class RootStore {
     }
     const val = _get(this.model, path);
 
-    if (['text', 'money', 'weight', 'percentage'].includes(field.input)) {
+    if (
+      val &&
+      ['text', 'money', 'weight', 'percentage'].includes(field.input)
+    ) {
       return val.toString();
     }
 
