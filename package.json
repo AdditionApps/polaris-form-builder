@@ -1,6 +1,6 @@
 {
   "name": "@additionapps/polaris-form-builder",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "A config-driven form builder for Shopify applications using the Polaris library",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
@@ -52,6 +52,7 @@
   "dependencies": {
     "@shopify/polaris": "4.*",
     "locale-currency": "0.0.2",
+    "lodash.clonedeep": "^4.5.0",
     "lodash.get": "4.4.2",
     "lodash.isequal": "4.5.0",
     "lodash.set": "4.3.2",
