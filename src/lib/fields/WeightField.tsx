@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState, useEffect, useContext } from "react";
 import { observer } from "mobx-react-lite";
 import { TextField } from "@shopify/polaris";
-import { FormFieldProps } from "../interfaces/FormFieldProps";
+import { FormFieldProps } from "../interfaces";
 import Store from "../stores/RootStore";
 
 const cleanString = value => {
@@ -14,15 +14,15 @@ const convertFromGrams = (value, weightUnit) => {
 
   switch (weightUnit) {
     case "kg":
-      return value / 1000;
+      return (value / 1000).toString();
     case "lb":
       let lb = value * 0.00220462;
-      return lb.toFixed(2);
+      return lb.toFixed(2).toString();
     case "oz":
       let oz = value * 0.035274;
-      return oz.toFixed(2);
+      return oz.toFixed(2).toString();
     default:
-      return value;
+      return value.toString();
   }
 };
 

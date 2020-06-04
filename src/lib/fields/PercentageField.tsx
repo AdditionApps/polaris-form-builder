@@ -31,7 +31,7 @@ const toDecimal = value => {
 const fromDecimal = value => {
   if (value == null || value === "") return null;
 
-  return value * 100;
+  return (value * 100).toString();
 };
 
 const Field = ({ field, ancestors }: FormFieldProps) => {
