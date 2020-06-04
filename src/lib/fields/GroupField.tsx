@@ -5,7 +5,7 @@ import { FormFieldProps } from '../interfaces/FormFieldProps';
 import { FormField } from '../interfaces/FormField';
 import { FormLayout } from '@shopify/polaris';
 import Store from '../stores/RootStore';
-const shortid = require('shortid');
+import shortid from 'shortid';
 
 const Field = ({ field, ancestors }: FormFieldProps) => {
   const wrapperStyle = {
@@ -17,8 +17,7 @@ const Field = ({ field, ancestors }: FormFieldProps) => {
 
   const subfieldMarkup = field.subFields.map((subField: FormField) => {
     const Field = store.getFieldName(subField);
-    const id = shortid.generate();
-    return <Field field={subField} ancestors={ancestors} key={id} />;
+    return <Field field={subField} ancestors={ancestors} key={shortid.generate()} />;
   });
 
   return (

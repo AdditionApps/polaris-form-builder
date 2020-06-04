@@ -7,7 +7,7 @@ import { FormField } from '../../interfaces/FormField';
 import { FormFieldParent } from '../../interfaces/FormFieldParent';
 import Store from '../../stores/RootStore';
 import _cloneDeep from 'lodash.clonedeep';
-const shortid = require('shortid');
+import shortid from 'shortid';
 
 interface IProps {
   field: FormField;
@@ -34,8 +34,7 @@ const Row = ({ field, ancestors, index }: IProps) => {
 
   const fields = field.subFields.map((subField: FormField) => {
     const Field = store.getFieldName(subField);
-    const id = shortid.generate();
-    return <Field field={subField} ancestors={updatedAncestors} key={id} />;
+    return <Field field={subField} ancestors={updatedAncestors} key={shortid.generate()} />;
   });
 
   const getFieldLayout = () => {

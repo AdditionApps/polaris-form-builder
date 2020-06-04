@@ -5,7 +5,7 @@ import { FormField } from '../../interfaces/FormField';
 import { FormFieldParent } from '../../interfaces/FormFieldParent';
 import RepeaterRow from './RepeaterRow';
 import Store from '../../stores/RootStore';
-const shortid = require('shortid');
+import shortid from 'shortid';
 
 interface IProps {
   field: FormField;
@@ -16,14 +16,11 @@ const Rows = ({ field, ancestors }: IProps) => {
   const store = useContext(Store);
   const rows = store.getValue(field, ancestors);
 
-  const rowLayout = rows.map((row: object, index: number) => {
-    const id = shortid.generate();
+  return rows.map((row: object, index: number) => {
     return (
-      <RepeaterRow field={field} ancestors={ancestors} index={index} key={id} />
+      <RepeaterRow field={field} ancestors={ancestors} index={index} key={shortid.generate()} />
     );
   });
-
-  return rowLayout;
 };
 
 export default observer(Rows);

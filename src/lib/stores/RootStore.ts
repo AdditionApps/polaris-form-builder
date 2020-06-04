@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { toJS, observable, action } from 'mobx';
+import { action, observable, toJS } from 'mobx';
 import { computedFn } from 'mobx-utils';
 import { observer } from 'mobx-react-lite';
 import { Store } from '../interfaces/Store';
@@ -14,10 +14,10 @@ export class RootStore {
   @observable model = {};
   @observable errors = {};
   @observable units: FormUnits = {};
+  @observable fields = [];
   @observable allFieldInputs;
+  @observable customFieldInputs;
   onModelUpdate;
-  fields;
-  customFieldInputs;
 
   @action init({
     fields,
@@ -27,13 +27,15 @@ export class RootStore {
     onModelUpdate,
     customFields
   }: Store) {
-    this.fields = fields;
-    this.model = model;
-    this.errors = errors;
-    this.units = units;
-    this.onModelUpdate = onModelUpdate;
-    this.customFieldInputs = customFields;
-    this.allFieldInputs = this.mergeInputs();
+    setTimeout(() => {
+      this.customFieldInputs = customFields;
+      this.allFieldInputs = this.mergeInputs();
+      this.fields = fields;
+      this.model = model;
+      this.errors = errors;
+      this.units = units;
+      this.onModelUpdate = onModelUpdate;
+    }, 0);
   }
 
   @action updateValue(value, field: FormField, ancestors: FormFieldParent[]) {
@@ -94,10 +96,7 @@ export class RootStore {
     return;
   }
 
-  getValue = computedFn(function getValue(
-    field: FormField,
-    ancestors?: FormFieldParent[]
-  ) {
+  getValue = computedFn((field: FormField, ancestors?: FormFieldParent[]) => {
     const path = this.getPathFromAncestors(field, ancestors);
 
     if (ancestors) {
@@ -115,10 +114,7 @@ export class RootStore {
     return val;
   });
 
-  getErrors = computedFn(function getErrors(
-    field: FormField,
-    ancestors?: FormFieldParent[]
-  ) {
+  getErrors = computedFn((field: FormField, ancestors?: FormFieldParent[]) => {
     const path = this.getDotNotationPathFromAncestors(field, ancestors);
     return _get(this.errors, path);
   });

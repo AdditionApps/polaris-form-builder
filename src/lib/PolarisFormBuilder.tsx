@@ -1,23 +1,18 @@
 import * as React from 'react';
 import { memo, useContext } from 'react';
-import { FormField } from './interfaces/FormField';
-import { Store } from './interfaces/Store';
-import { FormLayout } from '@shopify/polaris';
+import { Store } from './interfaces';
 import StoreContext from './stores/RootStore';
 import _isEqual from 'lodash.isequal';
+import FieldContainer from './fields/components/FieldContainer';
 
 const FormBuilder = (props: Store) => {
+
   const store = useContext(StoreContext);
   store.init(props);
 
   return (
     <StoreContext.Provider value={store}>
-      <FormLayout>
-        {store.fields.map((field: FormField, index: number) => {
-          const Field = store.getFieldName(field);
-          return <Field field={field} key={index} />;
-        })}
-      </FormLayout>
+      <FieldContainer></FieldContainer>
     </StoreContext.Provider>
   );
 };
