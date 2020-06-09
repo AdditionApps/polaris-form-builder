@@ -1,28 +1,30 @@
-import * as React from 'react';
-import { memo, useContext } from 'react';
-import { Store } from './interfaces';
-import StoreContext from './stores/RootStore';
-import _isEqual from 'lodash.isequal';
-import FieldContainer from './fields/components/FieldContainer';
+import React, { memo } from "react";
+import flyd from "flyd";
+import meiosis from "meiosis-setup/mergerino";
+import merge from "mergerino";
+import _isEqual from "lodash.isequal";
+import { FieldContainer } from "./Components/FieldContainer";
+import { setup } from "./Store/FormStore";
+import { FormBuilder } from "./Interfaces";
 
-const FormBuilder = (props: Store) => {
+export const FormBuilderView = (props: FormBuilder) => {
+  const defaults = {
+    errors: {},
+    customFields: [],
+    onErrorUpdate: () => {}
+  };
+  const form = setup({ ...defaults, ...props });
+  const { states, actions } = meiosis({ stream: flyd, merge, app: form });
 
-  const store = useContext(StoreContext);
-  store.init(props);
+  return <FieldContainer states={states} actions={actions} key={Date.now()} />;
+};
 
+const propsEqual = (prev: FormBuilder, next: FormBuilder) => {
   return (
-    <StoreContext.Provider value={store}>
-      <FieldContainer></FieldContainer>
-    </StoreContext.Provider>
+    _isEqual(prev.fields, next.fields)
+    && _isEqual(prev.errors, next.errors)
+    && _isEqual(prev.units, next.units)
   );
 };
 
-const propsEqual = (prev, next) => {
-  return (
-    _isEqual(prev.fields, next.fields) &&
-    _isEqual(prev.units, next.units) &&
-    _isEqual(prev.errors, next.errors)
-  );
-};
-
-export const PolarisFormBuilder = memo(FormBuilder, propsEqual);
+export const PolarisFormBuilder = memo(FormBuilderView, propsEqual);

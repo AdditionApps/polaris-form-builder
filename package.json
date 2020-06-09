@@ -1,6 +1,6 @@
 {
   "name": "@additionapps/polaris-form-builder",
-  "version": "0.3.7",
+  "version": "1.0.0",
   "description": "A config-driven form builder for Shopify applications using the Polaris library",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
@@ -51,17 +51,19 @@
   },
   "dependencies": {
     "@shopify/polaris": "4.*",
+    "flyd": "0.2.8",
     "locale-currency": "0.0.2",
-    "lodash.clonedeep": "^4.5.0",
+    "lodash.clonedeep": "4.5.0",
     "lodash.get": "4.4.2",
     "lodash.isequal": "4.5.0",
-    "lodash.set": "4.3.2",
-    "mobx": "^5.15.4",
-    "mobx-react-lite": "^1.5.2",
-    "mobx-utils": "^5.5.5",
-    "react": "^16.13.0",
-    "react-dom": "^16.13.0",
-    "shortid": "^2.2.15"
+    "meiosis-setup": "5.0.0",
+    "meiosis-tracer": "3.0.0",
+    "mergerino": "0.4.0",
+    "module-alias": "^2.2.2",
+    "react": "16.10.2",
+    "react-dom": "16.10.2",
+    "react-scripts": "^3.4.1",
+    "shortid": "2.2.15"
   },
   "devDependencies": {
     "@bitjson/npm-scripts-info": "^1.0.0",
@@ -70,7 +72,7 @@
     "@types/node": "^12.12.29",
     "@types/react": "^16.9.23",
     "@types/react-dom": "^16.9.5",
-    "ava": "2.2.0",
+    "ava": "^3.8.2",
     "codecov": "^3.6.5",
     "cz-conventional-changelog": "^2.1.0",
     "gh-pages": "^2.2.0",
@@ -89,9 +91,6 @@
     "failFast": true,
     "files": [
       "build/main/**/*.spec.js"
-    ],
-    "sources": [
-      "build/main/**/*.js"
     ]
   },
   "config": {

@@ -1,16 +1,17 @@
-import * as React from "react";
-import { useContext } from "react";
-import { observer } from "mobx-react-lite";
+import React from "react";
 import { Subheading, TextContainer, Button, Stack } from "@shopify/polaris";
 import { CirclePlusMajorMonotone } from "@shopify/polaris-icons";
-import { FormFieldProps } from "../interfaces/FormFieldProps";
-import RepeaterRows from "./components/RepeaterRows";
-import Store from "../stores/RootStore";
+import { FieldProps } from "../Interfaces";
+import { getValue } from "../Utils";
+import { RepeaterRows } from "../Components/RepeaterRows";
 
-const Field = ({ field, ancestors }: FormFieldProps) => {
-  const store = useContext(Store);
-
-  const rows = store.getValue(field, ancestors);
+export const RepeaterField = ({
+  field,
+  state,
+  actions,
+  ancestors
+}: FieldProps) => {
+  const rows = getValue(state.model, field, ancestors);
 
   const showEmptyState = rows == null || rows.length === 0;
 
@@ -25,7 +26,9 @@ const Field = ({ field, ancestors }: FormFieldProps) => {
         <Button
           plain
           icon={CirclePlusMajorMonotone}
-          onClick={() => store.addRepeaterRow(field, 0, ancestors)}
+          onClick={() =>
+            actions.addRepeaterRow(0, state.model, field, ancestors)
+          }
         >
           {field.addButtonText ? field.addButtonText : "Add row"}
         </Button>
@@ -33,7 +36,14 @@ const Field = ({ field, ancestors }: FormFieldProps) => {
     </Stack>
   );
 
-  const rowLayout = <RepeaterRows field={field} ancestors={ancestors} />;
+  const rowLayout = (
+    <RepeaterRows
+      state={state}
+      actions={actions}
+      field={field}
+      ancestors={ancestors}
+    />
+  );
 
   return (
     <Stack vertical spacing="loose">
@@ -48,5 +58,3 @@ const Field = ({ field, ancestors }: FormFieldProps) => {
     </Stack>
   );
 };
-
-export default observer(Field);
