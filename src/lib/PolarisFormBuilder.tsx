@@ -9,6 +9,7 @@ import { FormBuilder } from "./Interfaces";
 
 export const FormBuilderView = (props: FormBuilder) => {
   const defaults = {
+    units: {},
     errors: {},
     customFields: [],
     onErrorUpdate: () => {}
