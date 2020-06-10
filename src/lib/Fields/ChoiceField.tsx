@@ -1,7 +1,7 @@
 import React from "react";
 import { ChoiceList, ChoiceListProps as PolarisChoiceListProps } from "@shopify/polaris";
 import { Field, FieldProps } from "../Interfaces";
-import { getValue } from "../Utils";
+import { getErrors, getValue } from '../Utils';
 
 interface LocalField extends Field {
   config: PolarisChoiceListProps;
@@ -37,6 +37,7 @@ export const ChoiceField = ({
   const fieldProps = {
     ...field.config,
     selected: value,
+    error: getErrors(state.errors, field, ancestors),
     title: field.config.title,
     choices: field.config.choices,
     onChange: value => updateValue(value),

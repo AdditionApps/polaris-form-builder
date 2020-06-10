@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useRef } from "react";
 import { TextField, TextFieldProps as PolarisTextFieldProps } from "@shopify/polaris";
 import { Field, FieldProps, Units } from "../Interfaces";
-import { getValue, cleanString } from "../Utils";
+import { getValue, cleanString, getErrors } from '../Utils';
 
 interface LocalField extends Field {
   config: PolarisTextFieldProps;
@@ -67,6 +67,7 @@ export const PercentageField = ({
   const fieldProps = {
     ...field.config,
     value: formattedValue,
+    error: getErrors(state.errors, field, ancestors),
     label: field.config.label,
     onChange: (value: string) => updateField(value),
     onFocus: () => onFieldFocus(),

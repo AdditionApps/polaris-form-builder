@@ -20,8 +20,8 @@ export const TextField = ({
   const fieldProps = {
     ...field.config,
     value: getValue(state.model, field, ancestors),
-    label: field.config.label,
     error: getErrors(state.errors, field, ancestors),
+    label: field.config.label,
     onChange: (value: string) => actions.updateField(value, field, ancestors),
   };
 

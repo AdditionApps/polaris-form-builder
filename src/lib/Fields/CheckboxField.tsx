@@ -1,7 +1,7 @@
 import React from "react";
 import { Checkbox, CheckboxProps as PolarisCheckboxProps } from "@shopify/polaris";
 import { Field, FieldProps } from "../Interfaces";
-import { getValue } from "../Utils";
+import { getErrors, getValue } from '../Utils';
 
 interface LocalField extends Field {
   config: PolarisCheckboxProps;
@@ -21,6 +21,7 @@ export const CheckboxField = ({
     ...field.config,
     checked: getValue(state.model, field, ancestors),
     label: field.config.label,
+    error: getErrors(state.errors, field, ancestors),
     onChange: value => actions.updateField(value, field, ancestors),
   };
 

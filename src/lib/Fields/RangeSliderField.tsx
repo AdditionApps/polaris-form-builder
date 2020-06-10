@@ -1,7 +1,7 @@
 import React from "react";
 import { RangeSlider, RangeSliderProps as PolarisRangeSliderProps } from "@shopify/polaris";
 import { Field, FieldProps } from "../Interfaces";
-import { getValue } from "../Utils";
+import { getErrors, getValue } from '../Utils';
 
 interface LocalField extends Field {
   config: PolarisRangeSliderProps;
@@ -22,6 +22,7 @@ export const RangeSliderField = ({
   const fieldProps = {
     ...field.config,
     value: value,
+    error: getErrors(state.errors, field, ancestors),
     label: field.config.label,
     onChange: value => actions.updateField(value, field, ancestors),
   };

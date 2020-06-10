@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { TextField, TextFieldProps as PolarisTextFieldProps } from "@shopify/polaris";
 import { Field, FieldProps } from "../Interfaces";
-import { getValue, cleanString } from "../Utils";
+import { getValue, cleanString, getErrors } from '../Utils';
 
 interface LocalField extends Field {
   config: PolarisTextFieldProps;
@@ -68,6 +68,7 @@ export const WeightField = ({
   const fieldProps = {
     ...field.config,
     value: valueRef.current,
+    error: getErrors(state.errors, field, ancestors),
     suffix: state.units.weight,
     label: field.config.label,
     onChange: (value: string) => updateField(value),
