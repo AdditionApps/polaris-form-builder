@@ -21,4 +21,6 @@ export interface Field {
   emptyMessage?: string;
   layout?: "stacked" | "grouped" | "condensed";
   addButtonText?: string;
+  title?: string;
+  defaultValue: string | number
 }
