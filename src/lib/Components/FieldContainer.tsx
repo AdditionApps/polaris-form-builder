@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FormLayout } from "@shopify/polaris";
-import { Field, Actions } from "../Interfaces";
+import { Actions, Field } from "../Interfaces";
 import { getFieldName } from "../Utils";
 
 interface Props {
