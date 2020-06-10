@@ -22,5 +22,5 @@ export interface Field {
   layout?: "stacked" | "grouped" | "condensed";
   addButtonText?: string;
   title?: string;
-  defaultValue: string | number
+  defaultValue?: string | number
 }
