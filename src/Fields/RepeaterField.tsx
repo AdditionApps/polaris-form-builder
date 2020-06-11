@@ -1,7 +1,7 @@
 import React from 'react';
 import { Subheading, TextContainer, Button, Stack } from '@shopify/polaris';
 import { CirclePlusMajorMonotone } from '@shopify/polaris-icons';
-import { FieldProps, ModelValue } from '../Interfaces';
+import { FieldProps } from '../Interfaces';
 import { getValue } from '../Utils';
 import { RepeaterRows } from '../Components/RepeaterRows';
 
@@ -13,7 +13,7 @@ export const RepeaterField = ({
 }: FieldProps) => {
     const rows = getValue(state.model, field, ancestors) as Record<
         string,
-        ModelValue
+        unknown
     >[];
 
     const showEmptyState = rows == null || rows.length === 0;

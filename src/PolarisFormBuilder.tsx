@@ -1,17 +1,17 @@
-import React, { memo } from 'react';
+import React, { FunctionComponent, memo } from 'react';
 import flyd from 'flyd';
 import meiosis from 'meiosis-setup/mergerino';
 import merge from 'mergerino';
 import _isEqual from 'lodash.isequal';
 import { FieldContainer } from './Components/FieldContainer';
 import { setup } from './Store/FormStore';
-import { FormBuilder } from './Interfaces';
+import { FieldProps, FormBuilder } from './Interfaces';
 
 export const FormBuilderView = (props: FormBuilder) => {
     const defaults = {
         units: {},
         errors: {},
-        customFields: [],
+        customFields: [] as FunctionComponent<FieldProps>[],
         onErrorUpdate: () => {
             return;
         },

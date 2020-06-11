@@ -1,9 +1,6 @@
 import React, { FunctionComponent } from 'react';
-import {
-    ChoiceList,
-    ChoiceListProps as PolarisChoiceListProps,
-} from '@shopify/polaris';
-import { Field, FieldProps, ModelValue } from '../Interfaces';
+import { ChoiceList, ChoiceListProps as PolarisChoiceListProps, } from '@shopify/polaris';
+import { Field, FieldProps } from '../Interfaces';
 import { getErrors, getValue } from '../Utils';
 
 interface LocalField extends Field {

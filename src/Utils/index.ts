@@ -5,7 +5,6 @@ import {
   Field,
   FieldParent,
   FieldProps,
-  ModelValue,
   MappedFields,
   Units, ErrorValue
 } from '../Interfaces';
@@ -13,12 +12,12 @@ import * as fieldInputs from '../Fields';
 import { FunctionComponent } from 'react';
 
 export const buildPatchFromAncestors = (
-    value: ModelValue,
+    value: any,
     field: Field,
     ancestors: FieldParent[] = [],
 ) => {
     return ancestors.reverse().reduce(
-        (acc: Record<string, ModelValue>, ancestor: FieldParent) => {
+        (acc: Record<string, unknown>, ancestor: FieldParent) => {
             return {
                 [ancestor.field.key]: {
                     [ancestor.index]: acc,
@@ -40,10 +39,10 @@ export const getPathFromAncestors = (
 };
 
 export const getValue = (
-    model: Record<string, ModelValue>,
+    model: any,
     field: Field,
     ancestors: FieldParent[] = [],
-): ModelValue => {
+): any => {
     const value = _get(model, getPathFromAncestors(field, ancestors));
 
     if (
@@ -64,30 +63,28 @@ export const getErrors = (
     return _get(errors, getPathFromAncestors(field, ancestors));
 };
 
-export const getBlankRepeaterRow = (field: Field) => {
-    return field.subFields
-        ? field.subFields
-              .flatMap((field: Field) => {
-                  if (field.input === 'group') {
-                      return field.subFields
-                          ? field.subFields.map((subField) => {
-                                return {
-                                    key: subField.key,
-                                    value: subField.defaultValue || null,
-                                };
-                            })
-                          : [];
-                  }
-                  return {
-                      key: field.key,
-                      value: field.defaultValue || null,
-                  };
-              })
-              .reduce((obj: Record<string, ModelValue>, field) => {
-                  obj[field.key] = field.value;
-                  return obj;
-              }, {})
-        : [];
+export const getBlankRepeaterRow = (field: Field): Record<string, unknown> => {
+    return field.subFields ? field.subFields
+        .flatMap((field: Field) => {
+            if (field.input === 'group') {
+                return field.subFields
+                    ? field.subFields.map((subField) => {
+                        return {
+                            key: subField.key,
+                            value: subField.defaultValue || null,
+                        };
+                    })
+                    : [];
+            }
+            return {
+                key: field.key,
+                value: field.defaultValue || null,
+            };
+        })
+        .reduce((obj: Record<string, unknown>, field) => {
+            obj[field.key] = field.value;
+            return obj;
+        }, {}) : {};
 };
 
 export const transformFields = (

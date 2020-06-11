@@ -5,7 +5,6 @@ export { FieldParent } from './FieldParent';
 export { FieldProps } from './FieldProps';
 export { FormBuilder } from './FormBuilder';
 export { MappedFields } from './MappedFields';
-export { ModelValue } from './ModelValue';
 export { Units } from './Units';
 export { WeightUnits } from './Units';
 export { State } from './State';

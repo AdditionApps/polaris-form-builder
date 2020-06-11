@@ -4,7 +4,6 @@ import {
     ErrorValue,
     Field,
     FieldParent,
-    ModelValue,
     State,
     Store,
 } from '../Interfaces';
@@ -18,12 +17,12 @@ import {
 } from '../Utils';
 
 interface UpdateableStateFields {
-    model: Record<string, ModelValue>;
+    model: Record<string, unknown>;
     errors?: Record<string, ErrorValue>;
 }
 
 interface UpdateFunction {
-    (state: UpdateableStateFields): State;
+    (state?: UpdateableStateFields): State;
 }
 
 export const setup = ({
@@ -36,7 +35,7 @@ export const setup = ({
     onErrorUpdate,
 }: Store) => {
     const ModelEffect = (update: UpdateFunction) => (state: State) => {
-        if (update(state) !== undefined) {
+        if (update() !== undefined) {
             onModelUpdate(state.model);
             onErrorUpdate(state.errors);
         }
@@ -53,7 +52,7 @@ export const setup = ({
         Actions: (update: UpdateFunction) => {
             return {
                 updateField: (
-                    value: string | number | [] | null,
+                    value: any,
                     field: Field,
                     ancestors?: FieldParent[],
                 ) => {
@@ -67,17 +66,17 @@ export const setup = ({
 
                 addRepeaterRow: (
                     rowIndex: number,
-                    model: Record<string, ModelValue>,
+                    model: Record<string, unknown>,
                     field: Field,
                     ancestors?: FieldParent[],
                 ) => {
                     const blankRow = getBlankRepeaterRow(field) as Record<
                         string,
-                        ModelValue
+                        unknown
                     >;
                     const currentRows = _cloneDeep(
                         getValue(model, field, ancestors),
-                    ) as Record<string, ModelValue>[];
+                    ) as Record<string, unknown>[];
 
                     if (currentRows && currentRows.length) {
                         currentRows.splice(rowIndex + 1, 0, blankRow);
@@ -101,13 +100,13 @@ export const setup = ({
 
                 removeRepeaterRow: (
                     rowIndex: number,
-                    model: Record<string, ModelValue>,
+                    model: Record<string, unknown>,
                     field: Field,
                     ancestors?: FieldParent[],
                 ) => {
                     const currentRows = _cloneDeep(
                         getValue(model, field, ancestors),
-                    ) as Record<string, ModelValue>[];
+                    ) as Record<string, unknown>[];
 
                     if (currentRows && currentRows.length > 1) {
                         currentRows.splice(rowIndex, 1);

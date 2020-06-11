@@ -1,5 +1,5 @@
 import React from 'react';
-import { FieldProps, ModelValue } from '../Interfaces';
+import { FieldProps } from '../Interfaces';
 import { getValue } from '../Utils';
 import { RepeaterRow } from './RepeaterRow';
 
@@ -11,11 +11,11 @@ export const RepeaterRows = ({
 }: FieldProps) => {
     const rows = getValue(state.model, field, ancestors) as Record<
         string,
-        ModelValue
+        unknown
     >[];
 
     const rowLayout = rows
-        ? rows.map((row: Record<string, ModelValue>, index: number) => {
+        ? rows.map((row: Record<string, unknown>, index: number) => {
               return (
                   <RepeaterRow
                       state={state}
