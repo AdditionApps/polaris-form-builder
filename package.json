@@ -1,7 +1,7 @@
 {
   "name": "@additionapps/polaris-form-builder",
-  "version": "1.0.4",
-  "description": "",
+  "version": "1.0.5",
+  "description": "Build forms in your Shopify Polaris apps with a simple config object.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -21,8 +21,6 @@
   "author": "John Wyles",
   "license": "MIT",
   "dependencies": {
-    "@additionapps/eslint-config-addition": "^2.0.0",
-    "@shopify/polaris": "4.*",
     "flyd": "0.2.8",
     "locale-currency": "0.0.2",
     "lodash.clonedeep": "4.5.0",
@@ -30,12 +28,11 @@
     "lodash.isequal": "4.5.0",
     "meiosis-setup": "5.0.0",
     "mergerino": "0.4.0",
-    "react": "16.10.2",
-    "react-dom": "16.10.2",
-    "react-scripts": "^3.4.1",
     "shortid": "2.2.15"
   },
   "devDependencies": {
+    "@additionapps/eslint-config-addition": "^2.2",
+    "@shopify/polaris": "4.*",
     "@types/lodash.clonedeep": "^4.5.6",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.isequal": "^4.5.5",
@@ -55,7 +52,14 @@
     "eslint-plugin-react": "^7.20.0",
     "eslint-plugin-standard": "^4.0.1",
     "prettier": "^2.0.5",
+    "react": "16.*",
+    "react-dom": "16.*",
     "typescript": "^3.8.3"
+  },
+  "peerDependencies": {
+    "@shopify/polaris": "4.*",
+    "react": "16.*",
+    "react-dom": "16.*"
   },
   "bugs": {
     "url": "https://github.com/AdditionApps/polaris-form-builder/issues"
