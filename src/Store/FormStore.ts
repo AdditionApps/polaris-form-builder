@@ -1,12 +1,5 @@
 import _cloneDeep from 'lodash.clonedeep';
-
-import {
-    ErrorValue,
-    Field,
-    FieldParent,
-    State,
-    Store,
-} from '../Interfaces';
+import { ErrorValue, Field, FieldParent, State, Store } from '../Interfaces';
 import {
     getValue,
     setupUnits,
@@ -17,8 +10,9 @@ import {
 } from '../Utils';
 
 interface UpdateableStateFields {
-    model: Record<string, unknown>;
+    model?: any;
     errors?: Record<string, ErrorValue>;
+    focus?: string | null;
 }
 
 interface UpdateFunction {
@@ -30,14 +24,17 @@ export const setup = ({
     units,
     fields,
     errors,
+    focus,
     customFields,
     onModelUpdate,
     onErrorUpdate,
+    onFocusUpdate,
 }: Store) => {
     const ModelEffect = (update: UpdateFunction) => (state: State) => {
         if (update() !== undefined) {
             onModelUpdate(state.model);
             onErrorUpdate(state.errors);
+            onFocusUpdate(state.focus);
         }
     };
 
@@ -46,6 +43,7 @@ export const setup = ({
             model,
             fields,
             errors,
+            focus,
             inputs: setupInputs(customFields),
             units: setupUnits(units),
         },
@@ -64,9 +62,15 @@ export const setup = ({
                     });
                 },
 
+                setFocus: (field: Field, ancestors?: FieldParent[]) => {
+                    update({
+                        focus: getPathFromAncestors(field, ancestors),
+                    });
+                },
+
                 addRepeaterRow: (
                     rowIndex: number,
-                    model: Record<string, unknown>,
+                    model: any,
                     field: Field,
                     ancestors?: FieldParent[],
                 ) => {
@@ -100,7 +104,7 @@ export const setup = ({
 
                 removeRepeaterRow: (
                     rowIndex: number,
-                    model: Record<string, unknown>,
+                    model: any,
                     field: Field,
                     ancestors?: FieldParent[],
                 ) => {

@@ -11,4 +11,5 @@ export interface State {
     fields: Field[];
     inputs: MappedFields;
     units: Units;
+    focus: string | null;
 }

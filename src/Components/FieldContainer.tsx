@@ -11,11 +11,24 @@ interface Props {
 export const FieldContainer = ({ states, actions }: Props) => {
     const [init, setInit] = useState(false);
     const [state, setState] = useState(states());
+    // const activeElement = useRef(document.activeElement as HTMLElement);
 
     if (!init) {
         setInit(true);
         states.map(setState);
     }
+
+    // console.log(activeElement.current);
+
+    // useEffect(() => {
+    //     return () => {
+    //         const element = document.activeElement as HTMLElement;
+    //         if (element && element.tagName === 'INPUT') {
+    //             activeElement.current = element;
+    //             console.log('activeElement after render:', activeElement.current);
+    //         }
+    //     };
+    // });
 
     return (
         <FormLayout>

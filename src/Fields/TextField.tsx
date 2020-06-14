@@ -1,10 +1,7 @@
 import React from 'react';
-import {
-    TextField as PolarisTextField,
-    TextFieldProps as PolarisTextFieldProps,
-} from '@shopify/polaris';
+import { TextField as PolarisTextField, TextFieldProps as PolarisTextFieldProps, } from '@shopify/polaris';
 import { Field, FieldProps } from '../Interfaces';
-import { getValue, getErrors } from '../Utils';
+import { getErrors, getPathFromAncestors, getValue } from '../Utils';
 
 interface LocalField extends Field {
     config: PolarisTextFieldProps;
@@ -25,8 +22,13 @@ export const TextField = ({
         value: getValue(state.model, field, ancestors) as string | undefined,
         error: getErrors(state.errors, field, ancestors),
         label: field.config.label,
-        onChange: (value: string) =>
-            actions.updateField(value, field, ancestors),
+        focused: state.focus === getPathFromAncestors(field, ancestors),
+        onFocus: () => {
+            actions.setFocus(field, ancestors);
+        },
+        onChange: (value: string) => {
+            actions.updateField(value, field, ancestors);
+        },
     };
 
     return <PolarisTextField {...fieldProps} />;

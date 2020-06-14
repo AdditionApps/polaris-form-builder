@@ -6,7 +6,9 @@ export interface FormBuilder {
     fields: Field[];
     units?: Units;
     errors?: Record<string, ErrorValue>;
+    focus?: string | null;
     customFields?: FunctionComponent[];
-    onModelUpdate: (model: Record<string, unknown>) => void;
-    onErrorUpdate?: (errors: Record<string, unknown>) => void;
+    onModelUpdate: (model: any) => void;
+    onErrorUpdate?: (errors: Record<string, ErrorValue>) => void;
+    onFocusUpdate?: (focus: string | null) => void;
 }

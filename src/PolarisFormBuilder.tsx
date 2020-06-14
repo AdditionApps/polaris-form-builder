@@ -11,8 +11,12 @@ export const FormBuilderView = (props: FormBuilder) => {
     const defaults = {
         units: {},
         errors: {},
+        focus: null as string | null,
         customFields: [] as FunctionComponent<FieldProps>[],
         onErrorUpdate: () => {
+            return;
+        },
+        onFocusUpdate: () => {
             return;
         },
     };
@@ -28,6 +32,7 @@ const propsEqual = (prev: FormBuilder, next: FormBuilder) => {
     return (
         _isEqual(prev.fields, next.fields) &&
         _isEqual(prev.errors, next.errors) &&
+        _isEqual(prev.focus, next.focus) &&
         _isEqual(prev.units, next.units)
     );
 };

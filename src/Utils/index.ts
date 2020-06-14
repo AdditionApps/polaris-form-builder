@@ -2,11 +2,12 @@ import _get from 'lodash.get';
 import _cloneDeep from 'lodash.clonedeep';
 import LocaleCurrency from 'locale-currency';
 import {
-  Field,
-  FieldParent,
-  FieldProps,
-  MappedFields,
-  Units, ErrorValue
+    Field,
+    FieldParent,
+    FieldProps,
+    MappedFields,
+    Units,
+    ErrorValue,
 } from '../Interfaces';
 import * as fieldInputs from '../Fields';
 import { FunctionComponent } from 'react';
@@ -17,7 +18,7 @@ export const buildPatchFromAncestors = (
     ancestors: FieldParent[] = [],
 ) => {
     return ancestors.reverse().reduce(
-        (acc: Record<string, unknown>, ancestor: FieldParent) => {
+        (acc: any, ancestor: FieldParent) => {
             return {
                 [ancestor.field.key]: {
                     [ancestor.index]: acc,
@@ -64,27 +65,29 @@ export const getErrors = (
 };
 
 export const getBlankRepeaterRow = (field: Field): Record<string, unknown> => {
-    return field.subFields ? field.subFields
-        .flatMap((field: Field) => {
-            if (field.input === 'group') {
-                return field.subFields
-                    ? field.subFields.map((subField) => {
-                        return {
-                            key: subField.key,
-                            value: subField.defaultValue || null,
-                        };
-                    })
-                    : [];
-            }
-            return {
-                key: field.key,
-                value: field.defaultValue || null,
-            };
-        })
-        .reduce((obj: Record<string, unknown>, field) => {
-            obj[field.key] = field.value;
-            return obj;
-        }, {}) : {};
+    return field.subFields
+        ? field.subFields
+              .flatMap((field: Field) => {
+                  if (field.input === 'group') {
+                      return field.subFields
+                          ? field.subFields.map((subField) => {
+                                return {
+                                    key: subField.key,
+                                    value: subField.defaultValue || null,
+                                };
+                            })
+                          : [];
+                  }
+                  return {
+                      key: field.key,
+                      value: field.defaultValue || null,
+                  };
+              })
+              .reduce((obj: Record<string, unknown>, field) => {
+                  obj[field.key] = field.value;
+                  return obj;
+              }, {})
+        : {};
 };
 
 export const transformFields = (
