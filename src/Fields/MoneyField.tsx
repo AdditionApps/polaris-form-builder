@@ -1,7 +1,12 @@
 import React, { useRef, useState } from 'react';
 import { TextField } from '@shopify/polaris';
 import { Units } from '../Interfaces';
-import { cleanString, getErrors, getValue } from '../Utils';
+import {
+    cleanString,
+    getErrors,
+    getPathFromAncestors,
+    getValue,
+} from '../Utils';
 import { TextFieldProps } from './TextField';
 
 const getFormatter = (units: Units) => {
@@ -34,10 +39,10 @@ export const MoneyField = ({
     const multiplier = getMultiplier(state.units);
     const formatData = getFormatData(state.units);
     const value = getValue(state.model, field, ancestors) as number;
-    const focusValue = value ? String(value / multiplier) : null;
+    const focusValue = value === null ? null : String(value / multiplier);
     const valueRef = useRef<string | null>(focusValue);
 
-    if (valueRef.current !== focusValue) {
+    if (parseFloat(valueRef.current) !== parseFloat(focusValue)) {
         valueRef.current = focusValue;
     }
 
@@ -54,6 +59,7 @@ export const MoneyField = ({
     const formattedValue = focus ? valueRef.current : blurValue;
 
     const onFieldFocus = () => {
+        actions.setFocus(field, ancestors);
         setFocus(true);
     };
 
@@ -66,7 +72,7 @@ export const MoneyField = ({
 
         const floatValue = getFloatValue(value);
 
-        if (!floatValue || isNaN(floatValue)) {
+        if (floatValue === null || isNaN(floatValue)) {
             actions.updateField(null, field, ancestors);
             return;
         }
@@ -82,9 +88,10 @@ export const MoneyField = ({
 
     const fieldProps = {
         ...field.config,
-        value: formattedValue || undefined,
+        value: formattedValue,
         error: getErrors(state.errors, field, ancestors),
         label: field.config.label,
+        focused: state.focus === getPathFromAncestors(field, ancestors),
         onChange: (value: string) => updateField(value),
         onFocus: () => onFieldFocus(),
         onBlur: () => onFieldBlur(),

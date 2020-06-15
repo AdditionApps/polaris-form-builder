@@ -1,7 +1,12 @@
 import React, { useRef } from 'react';
 import { TextField } from '@shopify/polaris';
 import { WeightUnits } from '../Interfaces';
-import { cleanString, getErrors, getValue } from '../Utils';
+import {
+    cleanString,
+    getErrors,
+    getPathFromAncestors,
+    getValue,
+} from '../Utils';
 import { TextFieldProps } from './TextField';
 
 const convertFromGrams = (value: number | null, weightUnit: WeightUnits) => {
@@ -22,7 +27,7 @@ const convertFromGrams = (value: number | null, weightUnit: WeightUnits) => {
 };
 
 const convertToGrams = (value: number | null, weightUnit: WeightUnits) => {
-    if (value !== 0 && !value) return null;
+    if (value === null) return null;
 
     switch (weightUnit) {
         case 'kg':
@@ -36,6 +41,10 @@ const convertToGrams = (value: number | null, weightUnit: WeightUnits) => {
     }
 };
 
+const valuesDiffer = (first: string, second: string) => {
+    return parseFloat(first) !== parseFloat(second);
+};
+
 export const WeightField = ({
     field,
     state,
@@ -47,24 +56,29 @@ export const WeightField = ({
     const valueFromGrams = convertFromGrams(value, units);
     const valueRef = useRef(valueFromGrams);
 
-    if (valueRef.current !== valueFromGrams) {
+    if (valuesDiffer(valueRef.current, valueFromGrams)) {
         valueRef.current = valueFromGrams;
     }
 
     const updateField = (value: string) => {
         valueRef.current = cleanString(value);
-        const updatedValue = value
-            ? convertToGrams(parseFloat(cleanString(value)), units)
-            : null;
+        const updatedValue =
+            value === null
+                ? null
+                : convertToGrams(parseFloat(valueRef.current), units);
         actions.updateField(updatedValue, field, ancestors);
     };
 
     const fieldProps = {
         ...field.config,
-        value: valueRef.current || undefined,
+        value: valueRef.current,
         error: getErrors(state.errors, field, ancestors),
         suffix: state.units.weight,
         label: field.config.label,
+        focused: state.focus === getPathFromAncestors(field, ancestors),
+        onFocus: () => {
+            actions.setFocus(field, ancestors);
+        },
         onChange: (value: string) => updateField(value),
     };
 

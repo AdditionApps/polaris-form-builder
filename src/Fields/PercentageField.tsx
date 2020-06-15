@@ -1,7 +1,12 @@
 import React, { useRef, useState } from 'react';
 import { TextField } from '@shopify/polaris';
 import { Units } from '../Interfaces';
-import { cleanString, getErrors, getValue } from '../Utils';
+import {
+    cleanString,
+    getErrors,
+    getPathFromAncestors,
+    getValue,
+} from '../Utils';
 import { TextFieldProps } from './TextField';
 
 const getFormatter = (units: Units) => {
@@ -11,10 +16,16 @@ const getFormatter = (units: Units) => {
     });
 };
 
+const sanitiseInput = (value: string) => {
+    return cleanString(value).split('.').slice(0, 2).join('.');
+};
+
 const toDecimal = (value: any) => {
     if (value == null || value === '') return null;
 
-    return parseFloat((parseFloat(cleanString(value)) / 100).toFixed(4));
+    const decimalValue = parseFloat(sanitiseInput(value)) / 100;
+
+    return parseFloat(decimalValue.toFixed(4));
 };
 
 const fromDecimal = (value: any) => {
@@ -34,7 +45,7 @@ export const PercentageField = ({
     const valueFromDecimal = fromDecimal(value);
     const valueRef = useRef(valueFromDecimal);
 
-    if (valueRef.current !== valueFromDecimal) {
+    if (parseFloat(valueRef.current) !== parseFloat(valueFromDecimal)) {
         valueRef.current = valueFromDecimal;
     }
 
@@ -44,6 +55,7 @@ export const PercentageField = ({
     const formattedValue = focus ? valueRef.current : blurValue;
 
     const onFieldFocus = () => {
+        actions.setFocus(field, ancestors);
         setFocus(true);
     };
 
@@ -61,6 +73,7 @@ export const PercentageField = ({
         value: formattedValue || undefined,
         error: getErrors(state.errors, field, ancestors),
         label: field.config.label,
+        focused: state.focus === getPathFromAncestors(field, ancestors),
         onChange: (value: string) => updateField(value),
         onFocus: () => onFieldFocus(),
         onBlur: () => onFieldBlur(),
