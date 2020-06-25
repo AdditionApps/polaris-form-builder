@@ -3,7 +3,7 @@ import { FormLayout, Button, Stack } from '@shopify/polaris';
 import { CirclePlusMajorMonotone } from '@shopify/polaris-icons';
 import _cloneDeep from 'lodash.clonedeep';
 import { Field, FieldProps } from '../Interfaces';
-import { getFieldName } from '../Utils';
+import { getFieldName, getValue } from '../Utils';
 
 interface Props extends FieldProps {
     index: number;
@@ -45,6 +45,16 @@ export const RepeaterRow = ({
           })
         : null;
 
+    const rows = getValue(state.model, field, ancestors) as Record<
+        string,
+        unknown
+    >[];
+
+    const canAddRows =
+        !field.maxRows || (field.maxRows && rows.length < field.maxRows);
+    const canRemoveRows =
+        !field.minRows || (field.minRows && rows.length > field.minRows);
+
     const getFieldLayout = () => {
         switch (field.layout) {
             case 'stacked':
@@ -72,38 +82,42 @@ export const RepeaterRow = ({
             <div style={controlStyle}>
                 <Stack>
                     <Stack.Item fill>
-                        <Button
-                            plain
-                            icon={CirclePlusMajorMonotone}
-                            onClick={() =>
-                                actions.addRepeaterRow(
-                                    index,
-                                    state.model,
-                                    field,
-                                    ancestors,
-                                )
-                            }
-                        >
-                            {field.addButtonText
-                                ? field.addButtonText
-                                : 'Add row'}
-                        </Button>
+                        {canAddRows && (
+                            <Button
+                                plain
+                                icon={CirclePlusMajorMonotone}
+                                onClick={() =>
+                                    actions.addRepeaterRow(
+                                        index,
+                                        state.model,
+                                        field,
+                                        ancestors,
+                                    )
+                                }
+                            >
+                                {field.addButtonText
+                                    ? field.addButtonText
+                                    : 'Add row'}
+                            </Button>
+                        )}
                     </Stack.Item>
                     <Stack.Item>
-                        <Button
-                            plain
-                            destructive
-                            onClick={() =>
-                                actions.removeRepeaterRow(
-                                    index,
-                                    state.model,
-                                    field,
-                                    ancestors,
-                                )
-                            }
-                        >
-                            Remove
-                        </Button>
+                        {canRemoveRows && (
+                            <Button
+                                plain
+                                destructive
+                                onClick={() =>
+                                    actions.removeRepeaterRow(
+                                        index,
+                                        state.model,
+                                        field,
+                                        ancestors,
+                                    )
+                                }
+                            >
+                                Remove
+                            </Button>
+                        )}
                     </Stack.Item>
                 </Stack>
             </div>

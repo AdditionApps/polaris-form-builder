@@ -13,7 +13,7 @@ type PolarisFieldProps =
     | ChoiceListProps
     | RangeSliderProps;
 
-type Layout = 'stacked' | 'grouped' | 'condensed';
+export type GroupLayout = 'stacked' | 'grouped' | 'condensed';
 
 export interface Field {
     key: string;
@@ -21,8 +21,10 @@ export interface Field {
     config?: PolarisFieldProps;
     subFields?: Field[];
     emptyMessage?: string;
-    layout?: Layout;
+    layout?: GroupLayout;
     addButtonText?: string;
     title?: string;
     defaultValue?: string | number;
+    minRows?: number;
+    maxRows?: number;
 }

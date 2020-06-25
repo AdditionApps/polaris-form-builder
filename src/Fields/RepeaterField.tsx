@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Subheading, TextContainer, Button, Stack } from '@shopify/polaris';
 import { CirclePlusMajorMonotone } from '@shopify/polaris-icons';
 import { FieldProps } from '../Interfaces';
@@ -11,10 +11,26 @@ export const RepeaterField = ({
     actions,
     ancestors,
 }: FieldProps) => {
+
+    const titleStyle = {
+        marginTop: '2.6rem',
+    };
+
     const rows = getValue(state.model, field, ancestors) as Record<
         string,
         unknown
     >[];
+
+    useEffect(() => {
+        const shouldAddMinRows =
+            field.minRows && (!rows || rows.length < field.minRows);
+
+        if (shouldAddMinRows) {
+            for (let i = 0; i < field.minRows; i++) {
+                actions.addRepeaterRow(i, state.model, field, ancestors);
+            }
+        }
+    });
 
     const showEmptyState = rows == null || rows.length === 0;
 
@@ -49,15 +65,15 @@ export const RepeaterField = ({
     );
 
     return (
-        <Stack vertical spacing="loose">
+        <div>
             {field.title && (
-                <Stack.Item>
+                <div style={titleStyle}>
                     <TextContainer spacing="loose">
                         <Subheading element="p">{field.title}</Subheading>
                     </TextContainer>
-                </Stack.Item>
+                </div>
             )}
             {showEmptyState ? emptyStateLayout : rowLayout}
-        </Stack>
+        </div>
     );
 };
