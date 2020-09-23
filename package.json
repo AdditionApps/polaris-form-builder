@@ -1,69 +1,69 @@
 {
-  "name": "@additionapps/polaris-form-builder",
-  "version": "1.4.0",
-  "description": "Build forms in your Shopify Polaris apps with a simple config object.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "build": "tsc",
-    "watch": "tsc --watch",
-    "prepare": "npm run build"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/AdditionApps/polaris-form-builder.git"
-  },
-  "keywords": [
-    "shopify",
-    "polaris",
-    "form",
-    "generator"
-  ],
-  "author": "John Wyles",
-  "license": "MIT",
-  "dependencies": {
-    "flyd": "0.2.8",
-    "locale-currency": "0.0.2",
-    "lodash.clonedeep": "4.5.0",
-    "lodash.get": "4.4.2",
-    "lodash.isequal": "4.5.0",
-    "meiosis-setup": "5.0.0",
-    "mergerino": "0.4.0",
-    "shortid": "2.2.15"
-  },
-  "devDependencies": {
-    "@additionapps/eslint-config-addition": "^2.2",
-    "@shopify/polaris": "4.*",
-    "@types/lodash.clonedeep": "^4.5.6",
-    "@types/lodash.get": "^4.4.6",
-    "@types/lodash.isequal": "^4.5.5",
-    "@types/mergerino": "^0.4.0",
-    "@types/node": "^12.12.29",
-    "@types/react": "^16.9.23",
-    "@types/react-dom": "^16.9.5",
-    "@typescript-eslint/eslint-plugin": "^3.2.0",
-    "@typescript-eslint/parser": "^3.2.0",
-    "eslint": "^7.2.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-config-standard": "^14.1.1",
-    "eslint-plugin-import": "^2.21.2",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^3.1.3",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-react": "^7.20.0",
-    "eslint-plugin-standard": "^4.0.1",
-    "prettier": "^2.0.5",
-    "react": "16.*",
-    "react-dom": "16.*",
-    "typescript": "^3.8.3"
-  },
-  "peerDependencies": {
-    "@shopify/polaris": "4.*",
-    "react": "16.*",
-    "react-dom": "16.*"
-  },
-  "bugs": {
-    "url": "https://github.com/AdditionApps/polaris-form-builder/issues"
-  },
-  "homepage": "https://github.com/AdditionApps/polaris-form-builder#readme"
+	"name": "@additionapps/polaris-form-builder",
+	"version": "1.4.0",
+	"description": "Build forms in your Shopify Polaris apps with a simple config object.",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"scripts": {
+		"build": "tsc",
+		"watch": "tsc --watch",
+		"prepare": "npm run build"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/AdditionApps/polaris-form-builder.git"
+	},
+	"keywords": [
+		"shopify",
+		"polaris",
+		"form",
+		"generator"
+	],
+	"author": "John Wyles",
+	"license": "MIT",
+	"dependencies": {
+		"flyd": "0.2.8",
+		"locale-currency": "0.0.2",
+		"lodash.clonedeep": "4.5.0",
+		"lodash.get": "4.4.2",
+		"lodash.isequal": "4.5.0",
+		"meiosis-setup": "5.0.0",
+		"mergerino": "0.4.0",
+		"shortid": "2.2.15"
+	},
+	"devDependencies": {
+		"@additionapps/eslint-config-addition": "^2.2",
+		"@shopify/polaris": "5.*",
+		"@types/lodash.clonedeep": "^4.5.6",
+		"@types/lodash.get": "^4.4.6",
+		"@types/lodash.isequal": "^4.5.5",
+		"@types/mergerino": "^0.4.0",
+		"@types/node": "^12.12.62",
+		"@types/react": "^16.9.49",
+		"@types/react-dom": "^16.9.5",
+		"@typescript-eslint/eslint-plugin": "^3.10.1",
+		"@typescript-eslint/parser": "^3.10.1",
+		"eslint": "^7.9.0",
+		"eslint-config-prettier": "^6.11.0",
+		"eslint-config-standard": "^14.1.1",
+		"eslint-plugin-import": "^2.22.0",
+		"eslint-plugin-node": "^11.1.0",
+		"eslint-plugin-prettier": "^3.1.4",
+		"eslint-plugin-promise": "^4.2.1",
+		"eslint-plugin-react": "^7.21.0",
+		"eslint-plugin-standard": "^4.0.1",
+		"prettier": "^2.1.2",
+		"react": "16.*",
+		"react-dom": "16.*",
+		"typescript": "^3.9.7"
+	},
+	"peerDependencies": {
+		"@shopify/polaris": "4.*",
+		"react": "16.*",
+		"react-dom": "16.*"
+	},
+	"bugs": {
+		"url": "https://github.com/AdditionApps/polaris-form-builder/issues"
+	},
+	"homepage": "https://github.com/AdditionApps/polaris-form-builder#readme"
 }
