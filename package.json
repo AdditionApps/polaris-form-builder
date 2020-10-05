@@ -58,7 +58,7 @@
 		"typescript": "^3.9.7"
 	},
 	"peerDependencies": {
-		"@shopify/polaris": "4.*",
+		"@shopify/polaris": "5.*",
 		"react": "16.*",
 		"react-dom": "16.*"
 	},
