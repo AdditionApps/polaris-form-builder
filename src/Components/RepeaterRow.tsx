@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormLayout, Button, Stack } from '@shopify/polaris';
-import { CirclePlusMajorMonotone } from '@shopify/polaris-icons';
+import { CirclePlusMajor } from '@shopify/polaris-icons';
 import _cloneDeep from 'lodash.clonedeep';
 import { Field, FieldProps } from '../Interfaces';
 import { getFieldName, getValue } from '../Utils';
@@ -85,7 +85,7 @@ export const RepeaterRow = ({
                         {canAddRows && (
                             <Button
                                 plain
-                                icon={CirclePlusMajorMonotone}
+                                icon={CirclePlusMajor}
                                 onClick={() =>
                                     actions.addRepeaterRow(
                                         index,
