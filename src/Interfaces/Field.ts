@@ -25,6 +25,7 @@ export interface Field {
     addButtonText?: string;
     title?: string;
     defaultValue?: string | number;
+    warning?: string;
     minRows?: number;
     maxRows?: number;
 }
