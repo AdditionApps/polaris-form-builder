@@ -3,7 +3,7 @@ import {
     TextField as PolarisTextField,
     TextFieldProps as PolarisTextFieldProps,
 } from '@shopify/polaris';
-import { Field, FieldProps, Units } from '../Interfaces';
+import { Field, FieldProps } from '../Interfaces';
 import { getErrors, getPathFromAncestors, getValue } from '../Utils';
 
 interface LocalField extends Field {
