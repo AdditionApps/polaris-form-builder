@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FormLayout } from '@shopify/polaris';
+import { FormLayout, Banner, Stack } from '@shopify/polaris';
 import { Actions, Field } from '../Interfaces';
 import { getFieldName } from '../Utils';
 
@@ -23,12 +23,14 @@ export const FieldContainer = ({ states, actions }: Props) => {
                 const Field = getFieldName(field, state.inputs);
 
                 return (
-                    <Field
-                        field={field}
-                        state={state}
-                        actions={actions}
-                        key={index}
-                    />
+                    <Stack vertical spacing="tight" key={index}>
+                        <Field field={field} state={state} actions={actions} />
+                        {field.warning && (
+                            <Banner status="warning">
+                                <p>{field.warning}</p>
+                            </Banner>
+                        )}
+                    </Stack>
                 );
             })}
         </FormLayout>

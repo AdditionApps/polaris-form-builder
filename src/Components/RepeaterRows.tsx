@@ -2,6 +2,7 @@ import React from 'react';
 import { FieldProps } from '../Interfaces';
 import { getValue } from '../Utils';
 import { RepeaterRow } from './RepeaterRow';
+import { Stack } from '@shopify/polaris';
 
 export const RepeaterRows = ({
     field,
@@ -29,5 +30,5 @@ export const RepeaterRows = ({
           })
         : null;
 
-    return <>{rowLayout}</>;
+    return <Stack vertical>{rowLayout}</ Stack>;
 };

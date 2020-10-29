@@ -21,11 +21,6 @@ export const RepeaterRow = ({
         marginLeft: '-2rem',
     };
 
-    const controlStyle = {
-        marginTop: '1rem',
-        marginBottom: '2rem',
-    };
-
     const updatedAncestors = ancestors ? _cloneDeep(ancestors) : [];
 
     updatedAncestors.push({ field, index });
@@ -77,9 +72,9 @@ export const RepeaterRow = ({
     };
 
     return (
-        <div>
-            {getFieldLayout()}
-            <div style={controlStyle}>
+        <Stack vertical spacing="loose">
+            <Stack.Item>{getFieldLayout()}</Stack.Item>
+            <Stack.Item>
                 <Stack>
                     <Stack.Item fill>
                         {canAddRows && (
@@ -120,7 +115,7 @@ export const RepeaterRow = ({
                         )}
                     </Stack.Item>
                 </Stack>
-            </div>
-        </div>
+            </Stack.Item>
+        </Stack>
     );
 };

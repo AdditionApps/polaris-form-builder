@@ -21,6 +21,15 @@ export const RepeaterField = ({
         unknown
     >[];
 
+    const subFieldsWrapperStyle = ancestors
+        ? {
+              borderLeft: '5px solid #f4f6f8',
+              paddingLeft: '2rem',
+              marginTop: '2rem',
+              overflow: 'auto',
+          }
+        : null;
+
     useEffect(() => {
         const shouldAddMinRows =
             field.minRows && (!rows || rows.length < field.minRows);
@@ -65,7 +74,7 @@ export const RepeaterField = ({
     );
 
     return (
-        <div>
+        <div style={subFieldsWrapperStyle}>
             {field.title && (
                 <div style={titleStyle}>
                     <TextContainer spacing="loose">
