@@ -274,6 +274,25 @@ Minimum configuration:
 
 The `config` object can include any of the props defined in the [Shopify Polaris Text Field](https://polaris.shopify.com/components/forms/text-field) documentation except `value`, `error`, `focused`, `onChange`, `onFocus` and `onBlur` as these are handled by the Form Builder.
 
+#### `simple_money`
+
+This field is a much more basic version of the `money` field. It is essentially a `text` field with a prefix displaying the currency specified in the `units` prop. No additional checks or formatting are performed on input - it is assumed that the backend of your application is responsible for validating and processing input and that the value passed to this field is in the correct format.
+
+Minimum configuration:
+
+```js
+{
+  key: "my_simple_money_field",
+  input: "simple_money",
+  config: {
+    // required by Polaris component
+    label: "How much is it worth?",
+  }
+}
+```
+
+The `config` object can include any of the props defined in the [Shopify Polaris Text Field](https://polaris.shopify.com/components/forms/text-field) documentation except `value`, `error`, `focused`, `onFocus` and `onChange` as these are handled by the Form Builder.
+
 #### `percentage`
 
 This field allows for percentage values to be persisted as a decimal. The value will be displayed as the more human-friendly percentage when focussed and will display a formatted version of the percentage based on the locale (This is specified via the `units` prop on the Form Builder - see Configuring a Form Builder).
@@ -381,6 +400,44 @@ Minimum configuration:
 ```
 
 The `config` object can include any of the props defined in the [Shopify Polaris Select Field](https://polaris.shopify.com/components/forms/select) documentation except `value`, `error` and `onChange` as these are handled by the Form Builder.
+
+#### `simple_money`
+
+This field is a much more basic version of the `money` field. It is essentially a `text` field with a prefix displaying the currency specified in the `units` prop. No additional checks or formatting are performed on input - it is assumed that the backend of your application is responsible for validating and processing input and that the value passed to this field is in the correct format.
+
+Minimum configuration:
+
+```js
+{
+  key: "my_simple_money_field",
+  input: "simple_money",
+  config: {
+    // required by Polaris component
+    label: "How much is it worth?",
+  }
+}
+```
+
+The `config` object can include any of the props defined in the [Shopify Polaris Text Field](https://polaris.shopify.com/components/forms/text-field) documentation except `value`, `error`, `focused`, `onFocus` and `onChange` as these are handled by the Form Builder.
+
+#### `simple_weight`
+
+This field is a much more basic version of the `weight` field. It is essentially a `text` field with a suffix displaying the weight units specified in the `units` prop. No additional checks or formatting are performed on input - it is assumed that the backend of your application is responsible for validating and processing input and that the value passed to this field is in the correct format.
+
+Minimum configuration:
+
+```js
+{
+  key: "my_simple_weight_field",
+  input: "simple_weight",
+  config: {
+    // required by Polaris component
+    label: "How much does it weigh?",
+  }
+}
+```
+
+The `config` object can include any of the props defined in the [Shopify Polaris Text Field](https://polaris.shopify.com/components/forms/text-field) documentation except `value`, `error`, `focused`, `onFocus` and `onChange` as these are handled by the Form Builder.
 
 #### `text`
 
