@@ -48,7 +48,14 @@ export const getValue = (
 
     if (
         value &&
-        ['text', 'money', 'weight', 'percentage'].includes(field.input)
+        [
+            'text',
+            'money',
+            'weight',
+            'percentage',
+            'simple_money',
+            'simple_weight',
+        ].includes(field.input)
     ) {
         return String(value);
     }
