@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Subheading, TextContainer, Button, Stack } from '@shopify/polaris';
-import { CirclePlusMajor } from '@shopify/polaris-icons';
+import { CirclePlusMinor } from '@shopify/polaris-icons';
 import { FieldProps } from '../Interfaces';
 import { getValue } from '../Utils';
 import { RepeaterRows } from '../Components/RepeaterRows';
@@ -53,7 +53,7 @@ export const RepeaterField = ({
             <Stack.Item fill>
                 <Button
                     plain
-                    icon={CirclePlusMajor}
+                    icon={CirclePlusMinor}
                     onClick={() =>
                         actions.addRepeaterRow(0, state.model, field, ancestors)
                     }
