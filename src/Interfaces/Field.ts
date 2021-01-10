@@ -1,24 +1,10 @@
-import {
-    TextFieldProps,
-    CheckboxProps,
-    SelectProps,
-    ChoiceListProps,
-    RangeSliderProps,
-} from '@shopify/polaris';
-
-type PolarisFieldProps =
-    | TextFieldProps
-    | CheckboxProps
-    | SelectProps
-    | ChoiceListProps
-    | RangeSliderProps;
-
 export type GroupLayout = 'stacked' | 'grouped' | 'condensed';
 
 export interface Field {
     key: string;
     input: string;
-    config?: PolarisFieldProps;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    config?: any;
     subFields?: Field[];
     emptyMessage?: string;
     layout?: GroupLayout;
