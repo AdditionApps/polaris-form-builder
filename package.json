@@ -23,6 +23,7 @@
 	"license": "MIT",
 	"dependencies": {
 		"flyd": "0.2.8",
+		"fuse.js": "^6.4.6",
 		"locale-currency": "0.0.2",
 		"lodash.clonedeep": "4.5.0",
 		"lodash.get": "4.4.2",

@@ -1,3 +1,4 @@
+export { AutocompleteField, AutocompleteProps } from './AutocompleteField';
 export { CheckboxField, CheckboxProps } from './CheckboxField';
 export { ChoiceField, ChoiceListProps } from './ChoiceField';
 export { GroupField } from './GroupField';
