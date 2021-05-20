@@ -1,10 +1,5 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
-import {
-    Autocomplete,
-    AutocompleteProps as PolarisAutocompleteProps,
-    Icon,
-} from '@shopify/polaris';
-import { SearchMinor } from '@shopify/polaris-icons';
+import { Autocomplete, AutocompleteProps as PolarisAutocompleteProps, } from '@shopify/polaris';
 import { Field, FieldProps } from '../Interfaces';
 import { getErrors, getValue } from '../Utils';
 import Fuse from 'fuse.js';
