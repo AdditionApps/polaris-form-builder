@@ -1,6 +1,6 @@
 {
 	"name": "@additionapps/polaris-form-builder",
-	"version": "2.4.1",
+	"version": "2.4.2",
 	"description": "Build forms in your Shopify Polaris apps with a simple config object.",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
