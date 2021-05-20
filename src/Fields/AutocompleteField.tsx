@@ -91,8 +91,6 @@ export const AutocompleteField: FunctionComponent<AutocompleteProps> = ({
             }}
             label={field.config.label}
             value={inputValue}
-            prefix={<Icon source={SearchMinor} color="inkLighter" />}
-            placeholder="Search"
             error={getErrors(state.errors, field, ancestors)}
         />
     );
