@@ -1,15 +1,16 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
-import { Autocomplete, AutocompleteProps as PolarisAutocompleteProps, } from '@shopify/polaris';
+import {
+    Autocomplete,
+    AutocompleteProps as PolarisAutocompleteProps,
+    TextFieldProps as PolarisTextFieldProps,
+} from '@shopify/polaris';
 import { Field, FieldProps } from '../Interfaces';
-import { getErrors, getValue } from '../Utils';
+import { getErrors, getPathFromAncestors, getValue } from '../Utils';
 import Fuse from 'fuse.js';
 
-interface LocalPolarisAutocompleteProps extends PolarisAutocompleteProps {
-    label: string;
-}
-
 interface LocalField extends Field {
-    config: LocalPolarisAutocompleteProps;
+    config: PolarisAutocompleteProps;
+    text_field_config: PolarisTextFieldProps;
 }
 
 export interface AutocompleteProps extends Omit<FieldProps, 'field'> {
@@ -79,18 +80,24 @@ export const AutocompleteField: FunctionComponent<AutocompleteProps> = ({
         setOptions(results);
     }, [inputValue]);
 
-    const textField = (
-        <Autocomplete.TextField
-            onChange={(value) => {
-                setInputValue(value);
-            }}
-            label={field.config.label}
-            value={inputValue}
-            error={getErrors(state.errors, field, ancestors)}
-        />
-    );
+    const textFieldProps = {
+        ...field.text_field_config,
+        value: inputValue,
+        error: getErrors(state.errors, field, ancestors),
+        label: field.text_field_config.label,
+        focused: state.focus === getPathFromAncestors(field, ancestors),
+        onFocus: () => {
+            actions.setFocus(field, ancestors);
+        },
+        onChange: (value: string) => {
+            setInputValue(value);
+        },
+    };
+
+    const textField = <Autocomplete.TextField {...textFieldProps} />;
 
     const fieldProps = {
+        ...field.config,
         options: options,
         selected: selectedOptions,
         onSelect: (selected: string[]) => {
