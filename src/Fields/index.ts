@@ -1,6 +1,7 @@
 export { AutocompleteField, AutocompleteProps } from './AutocompleteField';
 export { CheckboxField, CheckboxProps } from './CheckboxField';
 export { ChoiceField, ChoiceListProps } from './ChoiceField';
+export { ComboboxField, ComboboxFieldProps, ListOption } from './ComboboxField';
 export { GroupField } from './GroupField';
 export { MoneyField } from './MoneyField';
 export { SimpleMoneyField } from './SimpleMoneyField';

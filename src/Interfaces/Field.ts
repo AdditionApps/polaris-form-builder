@@ -1,4 +1,5 @@
 import { TextFieldProps } from '@shopify/polaris';
+import { ListOption } from '../Fields';
 
 export type GroupLayout = 'stacked' | 'grouped' | 'condensed';
 
@@ -17,4 +18,5 @@ export interface Field {
     minRows?: number;
     maxRows?: number;
     text_field_config?: TextFieldProps;
+    options?: ListOption[];
 }
