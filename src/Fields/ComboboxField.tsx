@@ -96,7 +96,7 @@ export const ComboboxField = ({
             activator={activator}
             onClose={togglePopoverActive}
             ariaHaspopup="listbox"
-            autofocusTarget="first-node"
+            autofocusTarget="none"
             fullWidth
         >
             <OptionList
