@@ -26,7 +26,7 @@ export const RepeaterField = ({
               borderLeft: '5px solid #f4f6f8',
               paddingLeft: '2rem',
               marginTop: '2rem',
-              overflow: 'auto',
+              overflow: 'visible',
           }
         : null;
 

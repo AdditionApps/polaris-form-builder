@@ -34,7 +34,7 @@
 	},
 	"devDependencies": {
 		"@additionapps/eslint-config-addition": "^2.2",
-		"@shopify/polaris": "5.*",
+		"@shopify/polaris": "6.*",
 		"@types/lodash.clonedeep": "^4.5.6",
 		"@types/lodash.get": "^4.4.6",
 		"@types/lodash.isequal": "^4.5.5",
@@ -59,7 +59,7 @@
 		"typescript": "^3.9.7"
 	},
 	"peerDependencies": {
-		"@shopify/polaris": "5.*",
+		"@shopify/polaris": "6.*",
 		"react": "16.*",
 		"react-dom": "16.*"
 	},
